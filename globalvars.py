@@ -4,6 +4,7 @@ import configparser
 TOKEN_USERNAME="username"
 TOKEN_PASSWORD="password"
 TOKEN_HOST="host"
+CONFIG_FILE=".qsmcli.ses"
 
 class GlobalVars:
 
@@ -12,7 +13,7 @@ class GlobalVars:
     host=""
 
     @staticmethod
-    def save(cfg_filename="qsmcmd.session"):
+    def save(cfg_filename=CONFIG_FILE):
         config = configparser.ConfigParser()
         config.add_section('global')
         config.set('global', TOKEN_USERNAME, GlobalVars.username)
@@ -26,7 +27,7 @@ class GlobalVars:
         print("cfg file saved")
 
     @staticmethod
-    def load(cfg_filename="qsmcmd.session"):
+    def load(cfg_filename=CONFIG_FILE):
         try:
             config =  configparser.ConfigParser()
             config.read(cfg_filename)

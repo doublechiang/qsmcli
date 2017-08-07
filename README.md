@@ -1,4 +1,4 @@
-# qsmcmd
+# qsmcli
 Q system management command line tool
 
 ## supported command
@@ -10,4 +10,4 @@ to change the management server once the command has been successful issued, the
 the
 ###ipmi
 ###sdr
-sel
+###sel

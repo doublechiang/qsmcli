@@ -5,6 +5,7 @@ from globalvars import GlobalVars
 from exec import Exec
 
 class Sdr:
+    """Sensor Data Record command"""
 
     @staticmethod
     def supported_cmds():
@@ -12,19 +13,19 @@ class Sdr:
 
     def sdr_info(self):
         cmdline = GlobalVars.host_access() + " sdr info"
-        Exec(cmdline)
+        Exec(cmdline, printcmd=True)
 
     def sdr_list(self):
         cmdline = GlobalVars.host_access() + " sdr list"
-        Exec(cmdline)
+        Exec(cmdline, printcmd=True)
 
     def sdr_elist(self):
         cmdline = GlobalVars.host_access() + " sdr elist"
-        Exec(cmdline)
+        Exec(cmdline, printcmd=True)
 
     def sdr(self):
         cmdline = GlobalVars.host_access() + " sdr"
-        Exec(cmdline)
+        Exec(cmdline, printcmd=True)
 
     def __init__(self, arg):
         switcher = {

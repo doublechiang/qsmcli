@@ -8,6 +8,7 @@ from sel import Sel
 from sdr import Sdr
 from ipmi import Ipmi
 from nic import Nic
+from mac import Mac
 
 class QsmShell(cmd.Cmd):
 
@@ -27,20 +28,20 @@ class QsmShell(cmd.Cmd):
         self.last_output = output
 
     def do_sel(self, arg):
-        """System event log: info list csv
-            info: give information on the system log
-            list: list system event log
-            csv: csv <filename>, save the output to csv format"""
         sel = Sel(arg)
+    def help_sel(self):
+        print(Sel.__doc__)
+
     def complete_sel(self, text, line, begidx, endidx):
         return [ i for i in Sel.supported_cmds() if i.startswith(text)]
 
 
     def do_sdr(self, arg):
-        """Sensor Data Record command"""
         sdr = Sdr(arg)
     def complete_sdr(self, text, line, begidx, endidx):
         return [ i for i in Sdr.supported_cmds() if i.startswith(text)]
+    def help_sdr(self):
+        print(Sdr.__doc__)
 
     def do_exit(self, arg):
         """ exit from the shell """
@@ -82,26 +83,24 @@ class QsmShell(cmd.Cmd):
             print (GlobalVars.host)
 
     def do_ipmi(self, arg):
-        """ ipmitool command
-            redirect parameter suffix to ipmitool
-        """
         ipmi = Ipmi(arg)
+    def help_ipmi(self):
+        print(Ipmi.__doc__)
+
+    def do_mac(self, arg):
+        if len(arg.split()) != 0:
+            mac = Mac(arg)
+        else:
+            self.help_mac()
+    def complete_mac(self, text, line, begidx, endidx):
+        return [ i for i in Mac.supported_cmds() if i.startswith(text)]
+    def help_mac(self):
+        print (Mac.__doc__)
 
     def do_nic(self, arg):
-        """ nic command: get, set the NIC dedicate/share NIC
-            nic dedicate
-            nic lom-share
-            nic mezz-share0
-            nic mizz-share1
-            nic: get the command
-
-            Return: <complete code> <LAN Card Type>
-            For LAN Card Type,
-            0h- BMC Dedicated
-            2h- Shared NIC (OCP Mezzanine slot)
-            3h- Shared NIC (QCT Mezzanine slot)
-            """
         nic = Nic(arg)
+    def help_nic(self):
+        print(Nic.__doc__)
 
     def do_EOF(self, arg):
         return True

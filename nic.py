@@ -5,6 +5,19 @@ from globalvars import GlobalVars
 from exec import Exec
 
 class Nic():
+    """ nic command: get, set the NIC dedicate/share NIC
+    nic dedicate
+    nic lom-share
+    nic mezz-share0
+    nic mizz-share1
+    nic: get the command
+
+    Return: <complete code> <LAN Card Type>
+    For LAN Card Type,
+    0h- BMC Dedicated
+    2h- Shared NIC (OCP Mezzanine slot)
+    3h- Shared NIC (QCT Mezzanine slot)
+    """
 
     @staticmethod
     def supported_cmds():

@@ -5,6 +5,10 @@ from globalvars import GlobalVars
 from exec import Exec
 
 class Sel:
+    """System event log: info list csv
+    info: give information on the system log
+    list: list system event log
+    csv: csv <filename>, save the output to csv format"""
 
     @staticmethod
     def supported_cmds():
@@ -12,15 +16,15 @@ class Sel:
 
     def sel_info(self):
         cmdline = GlobalVars.host_access() + " sel info"
-        Exec(cmdline)
+        Exec(cmdline, printcmd=True)
 
     def sel_list(self):
         cmdline = GlobalVars.host_access() + " sel list"
-        Exec(cmdline)
+        Exec(cmdline, printcmd=True)
 
     def sel(self):
         cmdline = GlobalVars.host_access() + " sel list"
-        Exec(cmdline)
+        Exec(cmdline, printcmd=True)
 
     def __init__(self, arg):
         switcher = {
