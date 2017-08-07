@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 
 import os, sys
-import subprocess
 from globalvars import GlobalVars
+from exec import Exec
 
 class Sdr:
 
@@ -10,22 +10,21 @@ class Sdr:
     def supported_cmds():
         return ['info', 'list', 'elist']
 
-    def sdr_info():
+    def sdr_info(self):
         cmdline = GlobalVars.host_access() + " sdr info"
-        print(cmdline)
-        osstdout = subprocess.check_call(cmdline.split())
+        Exec(cmdline)
 
-    def sdr_list():
+    def sdr_list(self):
         cmdline = GlobalVars.host_access() + " sdr list"
-        osstdout = subprocess.check_call(cmdline.split())
+        Exec(cmdline)
 
-    def sdr_elist():
+    def sdr_elist(self):
         cmdline = GlobalVars.host_access() + " sdr elist"
-        osstdout = subprocess.check_call(cmdline.split())
+        Exec(cmdline)
 
-    def sdr():
+    def sdr(self):
         cmdline = GlobalVars.host_access() + " sdr"
-        osstdout = subprocess.check_call(cmdline.split())
+        Exec(cmdline)
 
     def __init__(self, arg):
         switcher = {

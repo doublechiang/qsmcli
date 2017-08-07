@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 
 import os, sys
-import subprocess
 from globalvars import GlobalVars
+from exec import Exec
 
 class Sel:
 
@@ -12,18 +12,15 @@ class Sel:
 
     def sel_info(self):
         cmdline = GlobalVars.host_access() + " sel info"
-        print(cmdline)
-#        osstdout = subprocess.check_call(cmdline.split())
+        Exec(cmdline)
 
     def sel_list(self):
         cmdline = GlobalVars.host_access() + " sel list"
-        print(cmdline)
-#        osstdout = subprocess.check_call(cmdline.split())
+        Exec(cmdline)
 
     def sel(self):
         cmdline = GlobalVars.host_access() + " sel list"
-        print(cmdline)
-#        osstdout = subprocess.check_call(cmdline.split())
+        Exec(cmdline)
 
     def __init__(self, arg):
         switcher = {

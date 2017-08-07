@@ -32,12 +32,15 @@ def main():
     if args.password:
         GlobalVars.password = args.password
 
+    GlobalVars.load()
     shell = QsmShell()
     shell.setPrompt()
     shell.cmdloop()
+    GlobalVars.save()
 
 
 if __name__ == "__main__":
-    GlobalVars.load()
+    """ Command line mode do not preserver any settings, this will cause un-consistence.
+        shell mode will try to keep the previous data as much as possible.
+        """
     main()
-    GlobalVars.save()

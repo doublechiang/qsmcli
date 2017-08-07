@@ -7,6 +7,7 @@ from globalvars import GlobalVars
 from sel import Sel
 from sdr import Sdr
 from ipmi import Ipmi
+from nic import Nic
 
 class QsmShell(cmd.Cmd):
 
@@ -85,6 +86,22 @@ class QsmShell(cmd.Cmd):
             redirect parameter suffix to ipmitool
         """
         ipmi = Ipmi(arg)
+
+    def do_nic(self, arg):
+        """ nic command: get, set the NIC dedicate/share NIC
+            nic dedicate
+            nic lom-share
+            nic mezz-share0
+            nic mizz-share1
+            nic: get the command
+
+            Return: <complete code> <LAN Card Type>
+            For LAN Card Type,
+            0h- BMC Dedicated
+            2h- Shared NIC (OCP Mezzanine slot)
+            3h- Shared NIC (QCT Mezzanine slot)
+            """
+        nic = Nic(arg)
 
     def do_EOF(self, arg):
         return True
