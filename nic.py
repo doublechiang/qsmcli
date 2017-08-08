@@ -49,7 +49,7 @@ class Nic():
             "lom-share": self.lom_share,
             "mezz-share0": self.mezz_share0,
             "mezz-sahre1": self.mezz_share1,
-            "": self.sel
+            "": self.nic
             }
         switcher[arg]()
         return None

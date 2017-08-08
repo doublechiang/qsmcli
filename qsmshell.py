@@ -9,6 +9,7 @@ from sdr import Sdr
 from ipmi import Ipmi
 from nic import Nic
 from mac import Mac
+from cpld import Cpld
 
 class QsmShell(cmd.Cmd):
 
@@ -101,6 +102,15 @@ class QsmShell(cmd.Cmd):
         nic = Nic(arg)
     def help_nic(self):
         print(Nic.__doc__)
+
+    def do_cpld(self, arg):
+        cpld = Cpld(arg)
+    def complete_cpld(self, text, line, begidx, endidx):
+        return [ i for i in Cpld.supported_cmds() if i.startswith(text)]
+    def help_cpld(self):
+        print (Cpld.__doc__)
+
+
 
     def do_EOF(self, arg):
         return True

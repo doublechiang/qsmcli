@@ -33,5 +33,9 @@ class Mac():
 
 
     def __init__(self, arg):
+        if len(arg.split()) == 0:
+            print (Mac.__doc__)
+            return
+
         self.getSystemMac(arg)
         return

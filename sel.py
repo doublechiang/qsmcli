@@ -26,11 +26,16 @@ class Sel:
         cmdline = GlobalVars.host_access() + " sel list"
         Exec(cmdline, printcmd=True)
 
+    def not_supported(self):
+        print("Not supported commands")
+        print(Sel.__doc__)
+
     def __init__(self, arg):
         switcher = {
             "info": self.sel_info,
             "list": self.sel_list,
             "": self.sel
             }
-        switcher[arg]()
+        func =  switcher.get(arg, self.not_supported)
+        func()
         return None
