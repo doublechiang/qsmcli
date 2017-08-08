@@ -22,7 +22,7 @@ class QsmShell(cmd.Cmd):
         pass
 
     def do_shell(self, line):
-        """Run a shell command"""
+        """Run a shell command by use a ! prefix """
         print ("running shell command:", line)
         output = os.popen(line).read()
         print (output)
@@ -89,10 +89,7 @@ class QsmShell(cmd.Cmd):
         print(Ipmi.__doc__)
 
     def do_mac(self, arg):
-        if len(arg.split()) != 0:
-            mac = Mac(arg)
-        else:
-            self.help_mac()
+        mac = Mac(arg)
     def complete_mac(self, text, line, begidx, endidx):
         return [ i for i in Mac.supported_cmds() if i.startswith(text)]
     def help_mac(self):
@@ -102,6 +99,8 @@ class QsmShell(cmd.Cmd):
         nic = Nic(arg)
     def help_nic(self):
         print(Nic.__doc__)
+    def complete_nic(self, text, line, begidx, endidx):
+        return [ i for i in Nic.supported_cmds() if i.startswith(text)]
 
     def do_cpld(self, arg):
         cpld = Cpld(arg)

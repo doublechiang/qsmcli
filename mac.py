@@ -5,7 +5,9 @@ from globalvars import GlobalVars
 from exec import Exec
 
 class Mac():
-    """ send several raw mac command and print out the mac we got
+    """ send raw get system mac command and print out the system mac we have
+    mac [index], index range from 0 to 5
+    for example: mac 0
     """
     @staticmethod
     def supported_cmds():
@@ -31,11 +33,22 @@ class Mac():
         result= Exec(cmdline)
         self.parse_raw_response(result.stdout.split())
 
+    def not_supported(self):
+        print("Not supported commands")
+        print(Mac.__doc__)
 
     def __init__(self, arg):
         if len(arg.split()) == 0:
             print (Mac.__doc__)
             return
+        try:
+            val = int(arg)
+            if (val >= 0) and (val < 6):
+                self.getSystemMac(arg)
+            else:
+                self.not_supported()
+        except:
+            self.not_supported()
 
-        self.getSystemMac(arg)
+
         return

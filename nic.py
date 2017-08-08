@@ -10,7 +10,7 @@ class Nic():
     nic lom-share
     nic mezz-share0
     nic mizz-share1
-    nic: get the command
+    nic: print the supported sub commands.
 
     Return: <complete code> <LAN Card Type>
     For LAN Card Type,
@@ -25,31 +25,31 @@ class Nic():
 
     def dedicate(self):
         cmdline = GlobalVars.host_access() + " raw 0x0c 0x01 0x01 0xff 0x00"
-        Exec(cmdline)
+        Exec(cmdline, printcmd=True)
 
     def lom_share(self):
         cmdline = GlobalVars.host_access() + " raw 0x0c 0x01 0x01 0xff 0x01"
-        Exec(cmdline)
+        Exec(cmdline, printcmd=True)
 
     def mezz_share0(self):
         cmdline = GlobalVars.host_access() + " raw 0x0c 0x01 0x01 0xff 0x02"
-        Exec(cmdline)
+        Exec(cmdline, printcmd=True)
 
     def mezz_share1(self):
         cmdline = GlobalVars.host_access() + " raw 0x0c 0x01 0x01 0xff 0x03"
         Exec(cmdline)
 
-    def nic(self):
-        cmdline = GlobalVars.host_access() + " raw 0x0c 0x02 0x01 0xff 0x0 0x0"
-        Exec(cmdline)
-
     def __init__(self, arg):
+        if len(arg.split()) == 0:
+            print (Nic.__doc__)
+            return
+
         switcher = {
             "dedicate": self.dedicate,
             "lom-share": self.lom_share,
             "mezz-share0": self.mezz_share0,
             "mezz-sahre1": self.mezz_share1,
-            "": self.nic
             }
-        switcher[arg]()
+        func =  switcher.get(arg, print(Nic.__doc__))
+        func()
         return None
