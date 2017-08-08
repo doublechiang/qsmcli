@@ -43,12 +43,10 @@ class Mac():
             return
         try:
             val = int(arg)
-            if (val >= 0) and (val < 6):
-                self.getSystemMac(arg)
-            else:
-                self.not_supported()
+            if (val < 0) or (val > 5):
+                raise ValueError
+            self.getSystemMac(arg)
         except:
             self.not_supported()
-
 
         return
