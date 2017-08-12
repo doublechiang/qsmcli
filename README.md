@@ -1,13 +1,21 @@
 # qsmcli
 Q system management command line tool
 
-## supported command
-### help
-### ch
+## supported shell mode and command
+### Command line mode
+When invoke this command, if there is any argument, then the command executed.
 
-print current management. specify the index to change the management server, use '<' or '>'
-to change the management server once the command has been successful issued, the server will be memorized automatically.
-the
-###ipmi
-###sdr
-###sel
+### Shell mode
+In Shell mode, if there is no argument is specified, then the shell mode is entered.
+The host and username/password is saved in the prompt.
+
+## Command supported
+### help/?
+Any command with help command involved will print the help message.
+
+### ipmi
+This is the command to redirect all of the command to ipmi interface
+### sdr
+Sensor Data Record command
+### sel
+System Event Log command
