@@ -16,7 +16,6 @@ class QsmShell(cmd.Cmd):
     intro = 'Type help or ? to list the command.\n'
 #    prompt = GlobalVars.host + ":" +  GlobalVars.username + "(" + GlobalVars.password +")>"
 
-
     def emptyline(self):
         """ Disable the last command when hitting enter """
         pass
@@ -35,7 +34,6 @@ class QsmShell(cmd.Cmd):
 
     def complete_sel(self, text, line, begidx, endidx):
         return [ i for i in Sel.supported_cmds() if i.startswith(text)]
-
 
     def do_sdr(self, arg):
         sdr = Sdr(arg)
