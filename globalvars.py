@@ -24,7 +24,7 @@ class GlobalVars:
             config.write(cfgfile)
             cfgfile.close()
 
-        print("cfg file saved")
+#        print("cfg file saved")
 
     @staticmethod
     def load(cfg_filename=CONFIG_FILE):
@@ -34,7 +34,7 @@ class GlobalVars:
             GlobalVars.username= config.get('global', TOKEN_USERNAME)
             GlobalVars.password= config.get('global', TOKEN_PASSWORD)
             GlobalVars.host= config.get('global', TOKEN_HOST)
-            print("Loading configuration.....")
+#            print("Loading configuration.....")
             config.close()
         except:
             pass

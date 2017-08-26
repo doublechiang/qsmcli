@@ -2,6 +2,7 @@
 Q system management command line tool
 
 ## supported shell mode and command
+
 ### Command line mode
 When invoke this command, if there is any argument, then the command executed.
 
@@ -19,3 +20,6 @@ This is the command to redirect all of the command to ipmi interface
 Sensor Data Record command
 ### sel
 System Event Log command
+
+## Test
+To run the unit test command, use 'python3 -m unittest'
