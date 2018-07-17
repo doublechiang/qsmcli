@@ -18,3 +18,6 @@ class Exec():
                 print(self.stdout)
         except:
             print("Exception generated!")
+
+    def output(self):
+        return self.stdout
