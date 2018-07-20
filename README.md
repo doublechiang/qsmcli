@@ -23,3 +23,6 @@ System Event Log command
 
 ## Test
 To run the unit test command, use 'python3 -m unittest'
+
+## Distribute the package
+To generate the package, use 'pyinstaller qsmcli.py' to build the package.
