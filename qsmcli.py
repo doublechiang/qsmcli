@@ -10,8 +10,9 @@ from sel import Sel
 from mac import Mac
 from cpld import Cpld
 from nic import Nic
+from install import Install
 
-__version__="0.3"
+__version__="0.4"
 
 class Qsmcli():
     """ Command line mode do not preserver any settings, this will cause un-consistence.
@@ -62,6 +63,7 @@ class Qsmcli():
             'nic_sub': (lambda self, x: QsmShell.do_nic(self, x)),
             'cpld_sub': (lambda self, x: QsmShell.do_cpld(self, x)),
             'ipmi_sub': (lambda self, x: QsmShell.do_ipmi(self, x)),
+            'install': (lambda self,x:QsmShell.do_install(self.x)),
         }
         cmd_mode=None
         for key, func in sub_commands.items():

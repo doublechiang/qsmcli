@@ -10,6 +10,7 @@ from ipmi import Ipmi
 from nic import Nic
 from mac import Mac
 from cpld import Cpld
+from install import Install
 
 class QsmShell(cmd.Cmd):
 
@@ -106,6 +107,13 @@ class QsmShell(cmd.Cmd):
         return [ i for i in Cpld.supported_cmds() if i.startswith(text)]
     def help_cpld(self):
         print (Cpld.__doc__)
+
+    def do_install(self, arg):
+        """ Install this application into system path
+        """
+        install=Install(arg)
+    def help_install(self):
+        print(Install.__doc__)
 
 
 

@@ -1,4 +1,7 @@
 # Release Notes
+## Version 0.4
+Support install sub command
+
 ## Version 0.3
 Support command line option mode.
 
