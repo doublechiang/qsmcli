@@ -11,6 +11,7 @@ from nic import Nic
 from mac import Mac
 from cpld import Cpld
 from install import Install
+from version import Version
 
 class QsmShell(cmd.Cmd):
 
@@ -115,6 +116,12 @@ class QsmShell(cmd.Cmd):
     def help_install(self):
         print(Install.__doc__)
 
+    def do_version(self, arg):
+        """ Install this application into system path
+        """
+        print(Version())
+    def help_version(self):
+        print(Version.__doc__)
 
 
     def do_EOF(self, arg):

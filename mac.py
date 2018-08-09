@@ -5,7 +5,8 @@ from globalvars import GlobalVars
 from exec import Exec
 
 class Mac():
-    """ send raw get system mac command and print out the system mac we have
+    """
+    send raw get system mac command and print out the system mac we have
     mac [index], index range from 0 to 5
     for example: mac 0
     """

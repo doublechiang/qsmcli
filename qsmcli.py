@@ -11,8 +11,8 @@ from mac import Mac
 from cpld import Cpld
 from nic import Nic
 from install import Install
+from version import Version
 
-__version__="0.4"
 
 class Qsmcli():
     """ Command line mode do not preserver any settings, this will cause un-consistence.
@@ -27,7 +27,7 @@ class Qsmcli():
         help="Assing username for IPMI session")
         parser.add_argument("-P", "--password", dest="password",
         help="Assing password for IPMI session")
-        parser.add_argument('--version', action='version', version= '%(prog)s ' + __version__  )
+        parser.add_argument('--version', action='version', version= '%(prog)s ' + Version().__str__()  )
 
         subp = parser.add_subparsers()
         parser_sdr= subp.add_parser('sdr')
@@ -64,6 +64,7 @@ class Qsmcli():
             'cpld_sub': (lambda self, x: QsmShell.do_cpld(self, x)),
             'ipmi_sub': (lambda self, x: QsmShell.do_ipmi(self, x)),
             'install': (lambda self,x:QsmShell.do_install(self.x)),
+            'version': (lambda self,x:QsmShell.do_version(self.x)),
         }
         cmd_mode=None
         for key, func in sub_commands.items():
