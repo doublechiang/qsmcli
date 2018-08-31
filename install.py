@@ -23,9 +23,9 @@ class Install():
         src = os.path.abspath(sys.argv[0])
         dest = LOCAL_BIN+basename
         if os.path.isfile(dest):
-            print(f"Destination file {dest} exist, overwriting it.")
+            print("Destination file %s exist, overwriting it." % dest)
             os.unlink(dest)
-        print(f"Creating symbolic link {dest} to {src}")
+        print("Creating symbolic link %s to %s " & (dest, src))
         os.symlink(src, dest)
 
     def install_in_win(self, arg):
@@ -41,7 +41,7 @@ class Install():
         try:
             # Check if file pre-exist and file permission
             if os.path.isfile(winbat_file):
-                print(f"Destination file {winbat_file} exist, overwriting it.")
+                print("Destination file %s exist, overwriting it." % winbat_file)
                 os.unlink(winbat_file)
                 if os.path.isfile(winbat_file):
                     print("Error! file can't be deleted")
@@ -50,8 +50,8 @@ class Install():
             # Create the batch file
             pgm = os.path.abspath(sys.argv[0])
             with open(winbat_file, 'w') as bat_file:
-                print(f"creating {winbat_file}")
-                bat_file.write(f"start \"\" \"{pgm}\" %*")
+                print("creating %s" %winbat_file)
+                bat_file.write("start \"\" \"%s\" %*" % pgm)
                 bat_file.close()
 
         except IOError:
