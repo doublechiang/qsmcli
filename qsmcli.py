@@ -3,6 +3,7 @@ import sys
 import os
 import subprocess
 import argparse
+import install
 from qsmshell import QsmShell
 from globalvars import GlobalVars
 from sdr import Sdr
