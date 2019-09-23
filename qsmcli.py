@@ -11,6 +11,7 @@ from sel import Sel
 from mac import Mac
 from cpld import Cpld
 from nic import Nic
+from fan import Fan
 from install import Install
 from version import Version
 
@@ -33,6 +34,8 @@ class Qsmcli():
         subp = parser.add_subparsers()
         parser_sdr= subp.add_parser('sdr')
         parser_sdr.add_argument('sdr_sub', nargs="*", choices=Sdr.supported_cmds())
+        parser_fan= subp.add_parser('fan')
+        parser_fan.add_argument('fan_sub', nargs="*", choices=Fan.supported_cmds())
         parser_sdr= subp.add_parser('sel')
         parser_sdr.add_argument('sel_sub', nargs="*", choices=Sel.supported_cmds())
         parser_sdr= subp.add_parser('mac')
@@ -63,6 +66,7 @@ class Qsmcli():
             'mac_sub': (lambda self, x: QsmShell.do_mac(self, x)),
             'nic_sub': (lambda self, x: QsmShell.do_nic(self, x)),
             'cpld_sub': (lambda self, x: QsmShell.do_cpld(self, x)),
+            'fan_sub': (lambda self, x: QsmShell.do_fan(self, x)),
             'ipmi_sub': (lambda self, x: QsmShell.do_ipmi(self, x)),
             'install': (lambda self,x:QsmShell.do_install(self.x)),
             'version': (lambda self,x:QsmShell.do_version(self.x)),

@@ -3,8 +3,9 @@
 import os, sys
 from globalvars import GlobalVars
 from exec import Exec
+from sub_command import SubCommand
 
-class Cpld():
+class Cpld(SubCommand):
     """ CPLD sub commands:
     fw: get CPLD fw
     cksum: get CPLD checksum
@@ -39,11 +40,6 @@ class Cpld():
         out = self.invoke(cmdline)
         print("Completion Code: ", format(out[0], '02x'))
         print("ID Code: ", out[1:5])
-
-
-    def not_supported(self):
-        print("Not supported commands")
-        print(Cpld.__doc__)
 
 
     def __init__(self, arg):

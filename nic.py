@@ -41,7 +41,7 @@ class Nic():
 
     def __init__(self, arg):
         if len(arg.split()) == 0:
-            print (Nic.__doc__)
+            print (self.__doc__)
             return
 
         switcher = {
@@ -50,6 +50,6 @@ class Nic():
             "mezz-share0": self.mezz_share0,
             "mezz-sahre1": self.mezz_share1,
             }
-        func =  switcher.get(arg, print(Nic.__doc__))
+        func =  switcher.get(arg, print(self.__doc__))
         func()
         return None

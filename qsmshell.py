@@ -10,6 +10,7 @@ from ipmi import Ipmi
 from nic import Nic
 from mac import Mac
 from cpld import Cpld
+from fan import Fan
 from install import Install
 from version import Version
 
@@ -29,11 +30,17 @@ class QsmShell(cmd.Cmd):
         print (output)
         self.last_output = output
 
+    def do_fan(self, arg):
+        fan = Fan(arg)
+    def help_fan(self):
+        print(Fan.__doc__)
+    def complete_fan(self, text, line, begidx, endidx):
+        return [ i for i in Fan.supported_cmds() if i.startswith(text)]
+
     def do_sel(self, arg):
         sel = Sel(arg)
     def help_sel(self):
         print(Sel.__doc__)
-
     def complete_sel(self, text, line, begidx, endidx):
         return [ i for i in Sel.supported_cmds() if i.startswith(text)]
 
