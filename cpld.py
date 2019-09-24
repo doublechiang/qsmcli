@@ -2,7 +2,7 @@
 
 import os, sys
 from globalvars import GlobalVars
-from exec import Exec
+from ipmiexec import IpmiExec
 from sub_command import SubCommand
 
 class Cpld(SubCommand):
@@ -12,6 +12,10 @@ class Cpld(SubCommand):
     id: Get CPLD idcode
     """
 
+    cpld_fw = [0x30, 0x17, 3]
+    cpld_cksum = [0x30, 0x17, 1]
+    cpld_id = [0x30, 0x17, 2]
+
     @staticmethod
     def supported_cmds():
         return ['fw', 'cksum', 'id']
@@ -20,26 +24,18 @@ class Cpld(SubCommand):
         """ Calling CPLD raw command, and parsing the output
             Decoding is based on IPMI OEM spec.
         """
-        exec = Exec(cmdline, printcmd=True)
+        exec = IpmiExec(cmdline).run(printcmd=True)
         return bytearray.fromhex(exec.output().rstrip())
 
     def fw(self):
-        cmdline = GlobalVars.host_access() + " raw 0x30 0x17 0x03"
-        out = self.invoke(cmdline)
-        print("Completion Code: ", format(out[0], '02x'))
-        print("CPLD Version: ", out[1:5])
+        exec = IpmiExec().marshal_raw_cmds(Cpld.cpld_fw).run(printcmd=True)
+        outbuf = exec.output()
 
     def cksum(self):
-        cmdline = GlobalVars.host_access() + " raw 0x30 0x17 0x01"
-        out = self.invoke(cmdline)
-        print("Completion Code: ", format(out[0], '02x'))
-        print("Checksum: ", out[1:3])
+        exec = IpmiExec().marshal_raw_cmds(Cpld.cpld_cksum).run(printcmd=True)
 
     def id(self):
-        cmdline = GlobalVars.host_access() + " raw 0x30 0x17 0x02"
-        out = self.invoke(cmdline)
-        print("Completion Code: ", format(out[0], '02x'))
-        print("ID Code: ", out[1:5])
+        exec = IpmiExec().marshal_raw_cmds(Cpld.cpld_id).run(printcmd=True)
 
 
     def __init__(self, arg):

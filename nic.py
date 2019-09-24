@@ -2,7 +2,7 @@
 
 import os, sys
 from globalvars import GlobalVars
-from exec import Exec
+from ipmiexec import IpmiExec
 
 class Nic():
     """ nic command: get, set the NIC dedicate/share NIC
@@ -19,25 +19,23 @@ class Nic():
     3h- Shared NIC (QCT Mezzanine slot)
     """
 
+    bmc_nic_set = [0x0c, 1, 1, 0xff]
+
     @staticmethod
     def supported_cmds():
         return ['dedicate', 'lom-share', 'mezz-share0', 'mezz-share1']
 
     def dedicate(self):
-        cmdline = GlobalVars.host_access() + " raw 0x0c 0x01 0x01 0xff 0x00"
-        Exec(cmdline, printcmd=True)
+        IpmiExec().marshal_raw_cmds(Nic.bmc_nic_set, [0]).run(printcmd=True)
 
     def lom_share(self):
-        cmdline = GlobalVars.host_access() + " raw 0x0c 0x01 0x01 0xff 0x01"
-        Exec(cmdline, printcmd=True)
+        IpmiExec().marshal_raw_cmds(Nic.bmc_nic_set, [1]).run(printcmd=True)
 
     def mezz_share0(self):
-        cmdline = GlobalVars.host_access() + " raw 0x0c 0x01 0x01 0xff 0x02"
-        Exec(cmdline, printcmd=True)
+        IpmiExec().marshal_raw_cmds(Nic.bmc_nic_set, [2]).run(printcmd=True)
 
     def mezz_share1(self):
-        cmdline = GlobalVars.host_access() + " raw 0x0c 0x01 0x01 0xff 0x03"
-        Exec(cmdline)
+        IpmiExec().marshal_raw_cmds(Nic.bmc_nic_set, [3]).run(printcmd=True)
 
     def __init__(self, arg):
         if len(arg.split()) == 0:

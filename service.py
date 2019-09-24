@@ -3,7 +3,7 @@
 import os, sys
 from globalvars import GlobalVars
 from sub_command import SubCommand
-from exec import Exec
+from ipmiexec import IpmiExec
 
 class Service(SubCommand):
     """ Service commands:
@@ -40,32 +40,25 @@ class Service(SubCommand):
 
         # get the service configutaion.
         service = self.supported_services[arg[0]]
-        exec=Exec()
-        raw_cmds = exec.marshal_raw_cmds(self.get_conf, service)
-        cmdline = GlobalVars.host_access() + raw_cmds
-        exec = Exec(cmdline, printcmd=True)
+        exec=IpmiExec()
+        raw_cmds = exec.marshal_raw_cmds(self.get_conf, service).run(printcmd=True)
         response_hex = exec.output().split()
         response = [int(x,16) for x in response_hex]
 
-        raw_cmds = exec.marshal_raw_cmds(self.set_conf, service, Service.enable_service, response[5:34], [0, 0])
-        cmdline = GlobalVars.host_access() + raw_cmds
-        exec = Exec(cmdline, printcmd=True)
+        exec.marshal_raw_cmds(self.set_conf, service, Service.enable_service, response[5:34], [0, 0]).run(printcmd=True)
+
 
     def disable(self, arg):
         if not self.__validate_service_arg(arg):
             return
         # get the service configutaion.
         service = self.supported_services[arg[0]]
-        exec = Exec()
-        raw_cmds = exec.marshal_raw_cmds(self.get_conf, service)
-        cmdline = GlobalVars.host_access() + raw_cmds
-        exec = Exec(cmdline, printcmd=True)
+        exec = IpmiExec()
+        raw_cmds = exec.marshal_raw_cmds(self.get_conf, service).run(printcmd=True)
         response_hex = exec.output().split()
         response = [int(x,16) for x in response_hex]
 
-        raw_cmds = exec.marshal_raw_cmds(self.set_conf, service, Service.disable_service, response[5:34], [0, 0])
-        cmdline = GlobalVars.host_access() + raw_cmds
-        exec = Exec(cmdline, printcmd=True)
+        raw_cmds = exec.marshal_raw_cmds(self.set_conf, service, Service.disable_service, response[5:34], [0, 0]).run(printcmd=True)
 
 
     def __validate_service_arg(self, arg):

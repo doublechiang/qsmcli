@@ -3,7 +3,7 @@
 import os, sys
 from globalvars import GlobalVars
 from sub_command import SubCommand
-from exec import Exec
+from ipmiexec import IpmiExec
 
 class Fan(SubCommand):
     """ fan commands: duty and auto to set fan duty and auto fan speed control.
@@ -14,6 +14,9 @@ class Fan(SubCommand):
     description: set the fan in manual mode.
     """
 
+    auto_cmd = [ 0x30, 0x39, 1, 0xf0, 0xff, 0xff]
+    duty_cmd = [ 0x30, 0x39, 0, 0]
+
     @staticmethod
     def supported_cmds():
         return ['auto', 'duty']
@@ -22,8 +25,7 @@ class Fan(SubCommand):
         """
         Fan auto commands do not require additional arguments.
         """
-        cmdline = GlobalVars.host_access() + " raw 0x30 0x39 1 0xf0 0xff 0xff"
-        Exec(cmdline, printcmd=True)
+        exec = IpmiExec().marshal_raw_cmds(Fan.auto_cmd).run(printcmd=True)
 
     def set_duty(self, arg):
         try:
@@ -42,8 +44,7 @@ class Fan(SubCommand):
             return
 
 
-        cmdline = GlobalVars.host_access() + " raw 0x30 0x39 0 0 " + arg[0] + " " +  arg[1]
-        Exec(cmdline, printcmd=True)
+        IpmiExec().marshal_raw_cmds(Fan.duty_cmd, [int(x) for x in arg]).run(printcmd=True)
 
 
     def __init__(self, arg):

@@ -2,7 +2,7 @@
 
 import os, sys
 from globalvars import GlobalVars
-from exec import Exec
+from ipmiexec import IpmiExec
 
 class Mac():
     """
@@ -10,6 +10,8 @@ class Mac():
     mac [index], index range from 0 to 5
     for example: mac 0
     """
+
+    get_system_mac = [0x30, 0x19]
     @staticmethod
     def supported_cmds():
         return ['0', '1', '2', '3', '4', '5']
@@ -30,9 +32,8 @@ class Mac():
             self.print_ieee(token[2:8])
 
     def getSystemMac(self, arg):
-        cmdline = GlobalVars.host_access() + " raw 0x030 0x019 " + arg + " 0x00"
-        result= Exec(cmdline)
-        self.parse_raw_response(result.stdout.split())
+        exec = IpmiExec().marshal_raw_cmds(Mac.get_system_mac, [int(arg)], [0]).run(printcmd=True)
+        self.parse_raw_response(exec.stdout.split())
 
     def not_supported(self):
         print("Not supported commands")

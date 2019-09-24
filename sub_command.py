@@ -2,7 +2,6 @@
 
 import os, sys
 from globalvars import GlobalVars
-from exec import Exec
 
 class SubCommand():
 

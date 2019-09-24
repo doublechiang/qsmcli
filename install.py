@@ -3,7 +3,6 @@
 import os
 import sys
 from globalvars import GlobalVars
-from exec import Exec
 
 class Install():
 

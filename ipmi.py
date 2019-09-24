@@ -4,7 +4,7 @@ import os, sys
 import subprocess
 
 from globalvars import GlobalVars
-from exec import Exec
+from ipmiexec import IpmiExec
 
 class Ipmi():
     """ ipmitool command
@@ -15,5 +15,4 @@ class Ipmi():
         self.ipmi_redirect(arg)
 
     def ipmi_redirect(self, arg):
-        cmdline = GlobalVars.host_access() + " " + arg
-        Exec(cmdline, printcmd=True)
+        IpmiExec(arg).run(printcmd=True)

@@ -61,4 +61,4 @@ class GlobalVars:
 
     @staticmethod
     def host_access():
-        return "ipmitool -H " + GlobalVars.host + " -U " + GlobalVars.username + " -P " + GlobalVars.password
+        return "ipmitool -H " + GlobalVars.host + " -U " + GlobalVars.username + " -P " + GlobalVars.password + " "
