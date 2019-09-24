@@ -11,6 +11,7 @@ from nic import Nic
 from mac import Mac
 from cpld import Cpld
 from fan import Fan
+from service import Service
 from install import Install
 from version import Version
 
@@ -36,6 +37,13 @@ class QsmShell(cmd.Cmd):
         print(Fan.__doc__)
     def complete_fan(self, text, line, begidx, endidx):
         return [ i for i in Fan.supported_cmds() if i.startswith(text)]
+
+    def do_service(self, arg):
+        service = Service(arg)
+    def help_service(self):
+        print(Service.__doc__)
+    def complete_serivce(self, text, line, begidx, endidx):
+        return [ i for i in Service.supported_cmds() if i.startswith(text)]
 
     def do_sel(self, arg):
         sel = Sel(arg)

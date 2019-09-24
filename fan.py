@@ -9,7 +9,7 @@ class Fan(SubCommand):
     """ fan commands: duty and auto to set fan duty and auto fan speed control.
     fan duty [index] [duty]
     :index fan index number
-    :duty 0-100
+    :duty 1-100
     fan auto
     description: set the fan in manual mode.
     """
@@ -35,7 +35,7 @@ class Fan(SubCommand):
             if (val < 0) or (val > 7):
                 raise ValueError
             val = int(arg[1])
-            if (val < 0 ) or (val > 100):
+            if (val < 1 ) or (val > 100):
                 raise ValueError
         except:
             self.not_supported()
@@ -49,7 +49,7 @@ class Fan(SubCommand):
     def __init__(self, arg):
         arglist = arg.split()
         if len(arglist) == 0:
-            print (self.__doc__)
+            self.not_supported()
             return
 
         switcher = {
