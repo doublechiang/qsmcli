@@ -6,8 +6,6 @@ import argparse
 import install
 from qsmshell import QsmShell
 from globalvars import GlobalVars
-from sdr import Sdr
-from sel import Sel
 from mac import Mac
 from cpld import Cpld
 from nic import Nic
@@ -34,14 +32,10 @@ class Qsmcli():
         parser.add_argument('--version', action='version', version= '%(prog)s ' + Version().__str__()  )
 
         subp = parser.add_subparsers()
-        parser_sdr= subp.add_parser('sdr')
-        parser_sdr.add_argument('sdr_sub', nargs="*", choices=Sdr.supported_cmds())
         parser_fan= subp.add_parser('fan')
         parser_fan.add_argument('fan_sub', nargs="*", choices=Fan.supported_cmds())
         parser_service= subp.add_parser('serivce')
         parser_service.add_argument('service_sub', nargs="*", choices=Service.supported_cmds())
-        parser_sdr= subp.add_parser('sel')
-        parser_sdr.add_argument('sel_sub', nargs="*", choices=Sel.supported_cmds())
         parser_sdr= subp.add_parser('mac')
         parser_sdr.add_argument('mac_sub', nargs="*", choices=Mac.supported_cmds())
         parser_sdr= subp.add_parser('nic')
@@ -65,8 +59,6 @@ class Qsmcli():
     # Processing argument, if any of the argements is presented, enter the command mode.
     # There is only one argement is allowed.
         sub_commands= {
-            'sdr_sub': (lambda self, x: QsmShell.do_sdr(self, x)),
-            'sel_sub': (lambda self, x: QsmShell.do_sel(self, x)),
             'mac_sub': (lambda self, x: QsmShell.do_mac(self, x)),
             'nic_sub': (lambda self, x: QsmShell.do_nic(self, x)),
             'cpld_sub': (lambda self, x: QsmShell.do_cpld(self, x)),

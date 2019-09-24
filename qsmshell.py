@@ -4,8 +4,6 @@ import cmd, sys
 import os
 
 from globalvars import GlobalVars
-from sel import Sel
-from sdr import Sdr
 from ipmi import Ipmi
 from nic import Nic
 from mac import Mac
@@ -44,20 +42,6 @@ class QsmShell(cmd.Cmd):
         print(Service.__doc__)
     def complete_serivce(self, text, line, begidx, endidx):
         return [ i for i in Service.supported_cmds() if i.startswith(text)]
-
-    def do_sel(self, arg):
-        sel = Sel(arg)
-    def help_sel(self):
-        print(Sel.__doc__)
-    def complete_sel(self, text, line, begidx, endidx):
-        return [ i for i in Sel.supported_cmds() if i.startswith(text)]
-
-    def do_sdr(self, arg):
-        sdr = Sdr(arg)
-    def complete_sdr(self, text, line, begidx, endidx):
-        return [ i for i in Sdr.supported_cmds() if i.startswith(text)]
-    def help_sdr(self):
-        print(Sdr.__doc__)
 
     def do_exit(self, arg):
         """ exit from the shell """
