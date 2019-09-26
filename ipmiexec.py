@@ -42,6 +42,5 @@ class IpmiExec():
                 cmdbuf += "0x%x " % val
 
         rawcmd = " raw " + cmdbuf
-        print(rawcmd)
         self.arg = rawcmd
         return self
