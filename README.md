@@ -16,10 +16,6 @@ Any command with help command involved will print the help message.
 
 ### ipmi
 This is the command to redirect all of the command to ipmi interface
-### sdr
-Sensor Data Record command
-### sel
-System Event Log command
 
 ## Test
 To run the unit test command, use 'python3 -m unittest'

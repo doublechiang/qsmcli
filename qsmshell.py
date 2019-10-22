@@ -79,11 +79,20 @@ class QsmShell(cmd.Cmd):
         """
         if arg:
             GlobalVars.host = arg.split()[0]
+            # if a single host switch only command, chheck if history has credentials or not
+            if len(arg.split()) == 1:
+                credential = GlobalVars.get_host_credential(GlobalVars.host)
+                if credential:
+                    GlobalVars.username = credential.get(GlobalVars.KEY_USERNAME, "")
+                    GlobalVars.password = credential.get(GlobalVars.KEY_PASSWORD, "")
             if len(arg.split()) > 1:
                 GlobalVars.username = arg.split()[1]
             if len(arg.split()) > 2:
                 GlobalVars.password = arg.split()[2]
             QsmShell.setPrompt(self)
+            GlobalVars.update_host_credential(GlobalVars.host, GlobalVars.username, GlobalVars.password)
+
+
         else:
             print (GlobalVars.host)
 
