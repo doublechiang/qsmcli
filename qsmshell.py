@@ -74,10 +74,15 @@ class QsmShell(cmd.Cmd):
     def do_host(self, arg):
         """ host [host_to_be_managed]
             print the current host ip address
-            host [ip]: assign the new ip address
+            host [ip] [username] [password]: assign the new ip address
+            if username and password are supplied, it will change the host/username/password in one command.
         """
         if arg:
             GlobalVars.host = arg.split()[0]
+            if len(arg.split()) > 1:
+                GlobalVars.username = arg.split()[1]
+            if len(arg.split()) > 2:
+                GlobalVars.password = arg.split()[2]
             QsmShell.setPrompt(self)
         else:
             print (GlobalVars.host)
