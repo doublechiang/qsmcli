@@ -2,41 +2,25 @@
 
 import os, sys
 import configparser
-
-TOKEN_USERNAME="username"
-TOKEN_PASSWORD="password"
-TOKEN_HOST="host"
+from config_store import ConfigStore
 
 class GlobalVars:
 
     username=""
     password=""
     host=""
-    CONFIG_FILE=".qsmcli.ses"
     TOKEN_USERNAME="username"
     TOKEN_PASSWORD="password"
     TOKEN_HOST="host"
 
     @staticmethod
-    def getAppConfigFile():
-        dir = os.path.dirname(os.path.realpath(sys.argv[0]))
-        config_file = dir + '/' + GlobalVars.CONFIG_FILE
-        return config_file
-
-
-    @staticmethod
     def save(cfg_filename=None):
-        if (cfg_filename is None):
-            cfg_filename=GlobalVars.getAppConfigFile()
-        config = configparser.ConfigParser()
-        config.add_section('global')
-        config.set('global', GlobalVars.TOKEN_USERNAME, GlobalVars.username)
-        config.set('global', GlobalVars.TOKEN_PASSWORD, GlobalVars.password)
-        config.set('global', GlobalVars.TOKEN_HOST, GlobalVars.host)
 
-        with open(cfg_filename, 'w') as cfgfile:
-            config.write(cfgfile)
-            cfgfile.close()
+        config = ConfigStore()
+        config.setValue(GlobalVars.TOKEN_USERNAME, GlobalVars.username)
+        config.setValue(GlobalVars.TOKEN_PASSWORD, GlobalVars.password)
+        config.setValue(GlobalVars.TOKEN_HOST, GlobalVars.host)
+        config.save(cfg_filename)
 
 #        print("cfg file saved")
 
@@ -44,20 +28,16 @@ class GlobalVars:
     def load(cfg_filename=None):
         """ Load the configuration file from application path
         """
-        if (cfg_filename is None):
-            cfg_filename=GlobalVars.getAppConfigFile()
 
         try:
-            config =  configparser.ConfigParser()
-            config.read(cfg_filename)
-            GlobalVars.username= config.get('global', GlobalVars.TOKEN_USERNAME)
-            GlobalVars.password= config.get('global', GlobalVars.TOKEN_PASSWORD)
-            GlobalVars.host= config.get('global', GlobalVars.TOKEN_HOST)
-#            print("Loading configuration.....")
-            config.close()
+            config = ConfigStore()
+            config.load(cfg_filename)
+            GlobalVars.username = config.getValue(GlobalVars.TOKEN_USERNAME)
+            GlobalVars.password = config.getValue(GlobalVars.TOKEN_PASSWORD)
+            GlobalVars.host = config.getValue(GlobalVars.TOKEN_HOST)
+
         except:
             pass
-
 
     @staticmethod
     def host_access():
