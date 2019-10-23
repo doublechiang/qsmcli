@@ -6,8 +6,6 @@ import json
 
 class ConfigStore:
 
-    CONFIG_FILE=".qsmcli.json"
-
     def setValue(self, key, value):
         self.dict[key] = value
     def getValue(self, key):
@@ -28,11 +26,6 @@ class ConfigStore:
         with open(filename, 'r') as json_file:
             self.dict=json.load(json_file)
             json_file.close()
-
-    def __get_config_file_path(self):
-        dir = os.path.dirname(os.path.realpath(sys.argv[0]))
-        config_file = dir + '/' + ConfigStore.CONFIG_FILE
-        return config_file
 
 
     def __init__(self):

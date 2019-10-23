@@ -1,7 +1,8 @@
 #! /usr/bin/env python3
 
-import cmd, sys
+import sys
 import os
+import cmd2
 
 from globalvars import GlobalVars
 from ipmi import Ipmi
@@ -13,7 +14,7 @@ from service import Service
 from install import Install
 from version import Version
 
-class QsmShell(cmd.Cmd):
+class QsmShell(cmd2.Cmd):
 
     intro = 'Type help or ? to list the command.\n'
 #    prompt = GlobalVars.host + ":" +  GlobalVars.username + "(" + GlobalVars.password +")>"

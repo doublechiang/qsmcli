@@ -77,7 +77,7 @@ class Qsmcli():
                 break
 
         if cmd_mode is not True:
-            shell = QsmShell()
+            shell = QsmShell(persistent_history_file= GlobalVars.get_history_file_path())
             shell.setPrompt()
             shell.cmdloop()
 

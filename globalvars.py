@@ -6,6 +6,8 @@ from config_store import ConfigStore
 
 class GlobalVars:
 
+    CONFIG_FILE=".qsmcli.json"
+    HISTORY_FILE=".qsmcli.history"
     username=""
     password=""
     host=""
@@ -18,6 +20,8 @@ class GlobalVars:
 
     @staticmethod
     def save(cfg_filename=None):
+        if cfg_filename is None:
+            cfg_filename = GlobalVars.get_config_file_path()
 
         config = ConfigStore()
         config.setValue(GlobalVars.KEY_USERNAME, GlobalVars.username)
@@ -35,6 +39,8 @@ class GlobalVars:
 
         try:
             config = ConfigStore()
+            if cfg_filename is None:
+                cfg_filename = GlobalVars.get_config_file_path()
             config.load(cfg_filename)
             GlobalVars.username = config.getValue(GlobalVars.KEY_USERNAME)
             GlobalVars.password = config.getValue(GlobalVars.KEY_PASSWORD)
@@ -59,3 +65,16 @@ class GlobalVars:
     @staticmethod
     def host_access():
         return "ipmitool -H " + GlobalVars.host + " -U " + GlobalVars.username + " -P " + GlobalVars.password + " "
+
+
+    @staticmethod
+    def __get_path():
+        return os.path.dirname(os.path.realpath(sys.argv[0]))
+
+    @staticmethod
+    def get_config_file_path():
+        return GlobalVars.__get_path() + '/' + GlobalVars.CONFIG_FILE
+
+    @staticmethod
+    def get_history_file_path():
+        return GlobalVars.__get_path() + '/' + GlobalVars.HISTORY_FILE
