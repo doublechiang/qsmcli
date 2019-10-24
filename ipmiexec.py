@@ -7,7 +7,8 @@ from globalvars import GlobalVars
 
 
 class IpmiExec():
-    """ Executing the command the arguement """
+    """ IPM command Object.
+    """
 
     def __init__(self, arg=None):
         self.arg = arg
@@ -43,4 +44,12 @@ class IpmiExec():
 
         rawcmd = " raw " + cmdbuf
         self.arg = rawcmd
+        return self
+
+    def with_bridge(self, bridge):
+        self.arg = "-t " + str(bridge) + " " + self.arg
+        return self
+
+    def with_channel(self, channel):
+        self.arg = "-b " + str(channel) + " " + self.arg
         return self

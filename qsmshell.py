@@ -13,6 +13,7 @@ from fan import Fan
 from service import Service
 from install import Install
 from version import Version
+from me import Me
 
 class QsmShell(cmd2.Cmd):
 
@@ -29,6 +30,13 @@ class QsmShell(cmd2.Cmd):
         output = os.popen(line).read()
         print (output)
         self.last_output = output
+
+    def do_me(self, arg):
+        me = Me(arg)
+    def help_me(self):
+        print(Me.__doc__)
+    def complete_me(self, text, line, begidx, endidx):
+        return [ i for i in Me.supported_cmds() if i.startswith(text)]
 
     def do_fan(self, arg):
         fan = Fan(arg)

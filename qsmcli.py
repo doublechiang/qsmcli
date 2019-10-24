@@ -11,6 +11,7 @@ from cpld import Cpld
 from nic import Nic
 from fan import Fan
 from service import Service
+from me import Me
 
 from install import Install
 from version import Version
@@ -42,6 +43,8 @@ class Qsmcli():
         parser_sdr.add_argument('nic_sub', nargs="*", choices=Nic.supported_cmds())
         parser_sdr= subp.add_parser('cpld')
         parser_sdr.add_argument('cpld_sub', nargs="*", choices=Cpld.supported_cmds())
+        parser_sdr= subp.add_parser('me')
+        parser_sdr.add_argument('me_sub', nargs="*", choices=Me().supported_cmds())
         parser_ipmi = subp.add_parser('ipmi')
         parser_ipmi.add_argument('ipmi_sub', nargs="*")
         self.args = parser.parse_args(args[1:])
@@ -62,6 +65,7 @@ class Qsmcli():
             'mac_sub': (lambda self, x: QsmShell.do_mac(self, x)),
             'nic_sub': (lambda self, x: QsmShell.do_nic(self, x)),
             'cpld_sub': (lambda self, x: QsmShell.do_cpld(self, x)),
+            'me_sub': (lambda self, x: QsmShell.do_me(self, x)),
             'fan_sub': (lambda self, x: QsmShell.do_fan(self, x)),
             'service_sub': (lambda self, x: QsmShell.do_service(self, x)),
             'ipmi_sub': (lambda self, x: QsmShell.do_ipmi(self, x)),
