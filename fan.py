@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 
 import os, sys
+import logging
 from globalvars import GlobalVars
 from sub_command import SubCommand
 from ipmiexec import IpmiExec
@@ -13,50 +14,45 @@ class Fan(SubCommand):
     fan auto
     description: set the fan in manual mode.
     """
+    supported_cmds = ['auto', 'duty']
 
-    auto_cmd = [ 0x30, 0x39, 1, 0xf0, 0xff, 0xff]
-    duty_cmd = [ 0x30, 0x39, 0, 0]
+    AUTO_CMD = [ 0x30, 0x39, 1, 0xf0, 0xff, 0xff]
+    DUTY_CMD = [ 0x30, 0x39, 0, 0]
 
-    @staticmethod
-    def supported_cmds():
-        return ['auto', 'duty']
-
-    def auto(self, arg):
+    def setUp(self, ipmiexec):
+        """ Callback function for fan duty parameters
+        geneate the index and the duty for "fan duty" command
         """
-        Fan auto commands do not require additional arguments.
-        """
-        exec = IpmiExec().marshal_raw_cmds(Fan.auto_cmd).run(printcmd=True)
+        print(Fan.DUTY_CMD)
+        logging.debug("composing FAN duty cmds=%s, %s, %s", Fan.DUTY_CMD, self.index, self.duty)
+        ipmiexec.marshal_raw_cmds(Fan.DUTY_CMD, [self.index, self.duty])
 
-    def set_duty(self, arg):
+    def __validate_arg(self, arg):
         try:
-            if len(arg) != 2:
+            token=arg.split()
+            if len(token) != 3:
                 raise ValueError
-
             # check if fan index between 0-7
-            val = int(arg[0])
-            if (val < 0) or (val > 7):
+            val1 = int(token[1])
+            if (val1 < 0) or (val1 > 7):
+                raise ValueEerror
+            self.index = val1
+            val2 = int(token[2])
+            if (val2 < 1 ) or (val2 > 100):
                 raise ValueError
-            val = int(arg[1])
-            if (val < 1 ) or (val > 100):
-                raise ValueError
+            self.duty = val2
         except:
             self.not_supported()
-            return
+            return False
+        return True
 
 
-        IpmiExec().marshal_raw_cmds(Fan.duty_cmd, [int(x) for x in arg]).run(printcmd=True)
 
+    def __init__(self, arg=None):
+        super().__init__(arg)
 
-    def __init__(self, arg):
-        arglist = arg.split()
-        if len(arglist) == 0:
-            self.not_supported()
-            return
-
-        switcher = {
-            "auto": self.auto,
-            "duty": self.set_duty,
-            }
-        func =  switcher.get(arglist[0], self.not_supported)
-        func(arglist[1:])
-        return
+        self.cmds = {
+            "duty" : IpmiExec(setup=self.setUp).marshal_raw_cmds(Fan.DUTY_CMD),
+            "auto" : IpmiExec().marshal_raw_cmds(Fan.AUTO_CMD),
+        }
+        self.__validate_arg(arg)

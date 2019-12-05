@@ -1,16 +1,15 @@
 #!/usr/bin/env python3
 
 import os, sys
+import logging
 from globalvars import GlobalVars
 from ipmiexec import IpmiExec
+from sub_command import SubCommand
 
-class Nic():
-    """ nic command: get, set the NIC dedicate/share NIC
-    nic dedicate
-    nic lom-share
-    nic mezz-share0
-    nic mizz-share1
-    nic: print the supported sub commands.
+class Nic(SubCommand):
+    """
+    get, set the BMC dedicate/share NIC
+    nic [dedicate|lom-share|mezz-share0|mizz-share1]
 
     Return: <complete code> <LAN Card Type>
     For LAN Card Type,
@@ -20,34 +19,29 @@ class Nic():
     """
 
     bmc_nic_set = [0x0c, 1, 1, 0xff]
+    supported_cmds = [ 'dedicate', 'lom-share', 'mezz-share0', 'mizz-share1' ]
 
-    @staticmethod
-    def supported_cmds():
-        return ['dedicate', 'lom-share', 'mezz-share0', 'mezz-share1']
+    def __validate_arg(self, arg):
+        try:
+            if arg is None or len(arg.split()) == 0:
+                raise ValueError
 
-    def dedicate(self):
-        IpmiExec().marshal_raw_cmds(Nic.bmc_nic_set, [0]).run(printcmd=True)
+            if len(arg.split()) > 0:
+                if not arg.split()[0] in self.cmds:
+                    raise ValueError
+        except ValueError:
+            self.not_supported()
+            return False
 
-    def lom_share(self):
-        IpmiExec().marshal_raw_cmds(Nic.bmc_nic_set, [1]).run(printcmd=True)
+        return True
 
-    def mezz_share0(self):
-        IpmiExec().marshal_raw_cmds(Nic.bmc_nic_set, [2]).run(printcmd=True)
+    def __init__(self, arg=None):
+        super().__init__(arg)
+        self.cmds = {
+            "dedicate": IpmiExec().marshal_raw_cmds(Nic.bmc_nic_set, [0]),
+            "lom-share": IpmiExec().marshal_raw_cmds(Nic.bmc_nic_set, [1]),
+            "mezz-share0": IpmiExec().marshal_raw_cmds(Nic.bmc_nic_set, [2]),
+            "mezz-sahre1": IpmiExec().marshal_raw_cmds(Nic.bmc_nic_set, [3])
+        }
+        self.__validate_arg(arg)
 
-    def mezz_share1(self):
-        IpmiExec().marshal_raw_cmds(Nic.bmc_nic_set, [3]).run(printcmd=True)
-
-    def __init__(self, arg):
-        if len(arg.split()) == 0:
-            print (self.__doc__)
-            return
-
-        switcher = {
-            "dedicate": self.dedicate,
-            "lom-share": self.lom_share,
-            "mezz-share0": self.mezz_share0,
-            "mezz-sahre1": self.mezz_share1,
-            }
-        func =  switcher.get(arg, print(self.__doc__))
-        func()
-        return None

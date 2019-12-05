@@ -1,17 +1,18 @@
 #!/usr/bin/env python3
 
 import os, sys
+import logging
 from globalvars import GlobalVars
 from sub_command import SubCommand
 from ipmiexec import IpmiExec
 
 class Service(SubCommand):
-    """ Service commands:
-    service enable/disable [services]
-    [service] include web, kvm, cd-media, hd-media, ssh and solssh.
-    Plesae notice this utility will get the service configuation data and
-    set the configuation data when set it. It do not guarantee that BMC has this feature.
-
+    """
+    eanble/disable Service commands:
+    service [web|kvm|cd-media|hd-media|ssh|solssh] [enable/disable]
+    Plesae notice this utility will get the service configuation data and then
+    based on the configuration get then set the whole configuration.
+     It do not guarantee that BMC has this feature.
     """
 
     get_conf = [0x32, 0x69]
@@ -29,63 +30,75 @@ class Service(SubCommand):
     enable_service = [1]
     disable_service = [0]
 
-    @staticmethod
-    def supported_cmds():
-        return ['enable', 'disable']
+    supported_cmds = [ 'web', 'kvm', 'cd-media', 'hd-media', 'ssh', 'solssh' ]
 
-    def enable(self, arg):
-        # check if the service is in the supported serivce
-        if not self.__validate_service_arg(arg):
-            return
+    valid_cmd = { 'web': ['enable', 'disable'], 
+        'kvm': ['enable', 'disable'],
+        'cd-media': ['enable', 'disable'],
+        'hd-media': ['enable', 'disable'],
+        'ssh': ['enable', 'disable'],
+        'solssh': ['enable', 'disable']
+    }
 
-        # get the service configutaion.
-        service = self.supported_services[arg[0]]
-        exec=IpmiExec()
-        raw_cmds = exec.marshal_raw_cmds(self.get_conf, service).run(printcmd=True)
+
+    def setUp(self, ipmiexec):
+        """ For service commands, need to issue get config commands first
+        """
+        logging.info("%s is called, self.arg=%s", self.setUp, self.arg)
+        target = self.arg.split()[0]
+        action = self.arg.split()[1]
+        exec = IpmiExec().marshal_raw_cmds(Service.get_conf, Service.supported_services[target]).composite_cmds().run()
         response_hex = exec.output().split()
         response = [int(x,16) for x in response_hex]
 
-        exec.marshal_raw_cmds(self.set_conf, service, Service.enable_service, response[5:34], [0, 0]).run(printcmd=True)
+        actionCmd = {
+            "enable": Service.enable_service,
+            "disable": Service.disable_service
+        }
 
+        ipmiexec.marshal_raw_cmds([int(x,16) for x in ipmiexec.raw.split()], actionCmd[action], response[5:34], [0,0])
+        
+    def __join_list(self, *argv ):
+        logging.debug(argv)
+        retlist= []
+        for list in argv:
+            retlist += list
+        return retlist
 
-    def disable(self, arg):
-        if not self.__validate_service_arg(arg):
-            return
-        # get the service configutaion.
-        service = self.supported_services[arg[0]]
-        exec = IpmiExec()
-        raw_cmds = exec.marshal_raw_cmds(self.get_conf, service).run(printcmd=True)
-        response_hex = exec.output().split()
-        response = [int(x,16) for x in response_hex]
+    def __validate_arg(self, arg):
+        """ Return true if the argument is correct
+        """
+        logging.debug("arg=%s", arg)
+        if arg == None:
+            return False
 
-        raw_cmds = exec.marshal_raw_cmds(self.set_conf, service, Service.disable_service, response[5:34], [0, 0]).run(printcmd=True)
-
-
-    def __validate_service_arg(self, arg):
+        token = arg.split()
         try:
-            if len(arg) != 1:
-                raise ValueError
-
-            if not (arg[0] in self.supported_services):
-                raise ValueError
+            if (len(token) >= 1):
+                if not (token[0] in self.valid_cmd):
+                    raise ValueError
+                if len(token) >= 2:
+                    allowed_list = self.valid_cmd[token[0]]
+                    if not (token[1] in allowed_list):
+                        raise ValueError
+                else:
+                # In this commands, every command should follow with enable/disable
+                    raise ValueError
         except:
             self.not_supported()
             return False
         return True
 
 
-    def __init__(self, arg):
-
-        # enable/disable [service], argument must be 2
-        arglist = arg.split()
-        if len(arglist) != 2:
-            self.not_supported()
-            return
-
-        switcher = {
-            "enable": self.enable,
-            "disable": self.disable,
+    def __init__(self, arg=None):
+        super().__init__(arg)
+        self.cmds = dict()
+        if self.__validate_arg(arg):
+            self.cmds = {
+                "web": IpmiExec(setup=self.setUp).marshal_raw_cmds(Service.set_conf, Service.supported_services['web']),
+                "kvm": IpmiExec(setup=self.setUp).marshal_raw_cmds(Service.set_conf, Service.supported_services['kvm']),
+                "cd-media": IpmiExec(setup=self.setUp).marshal_raw_cmds(Service.set_conf, Service.supported_services['cd-media']),
+                "hd-media": IpmiExec(setup=self.setUp).marshal_raw_cmds(Service.set_conf, Service.supported_services['hd-media']),
+                "ssh": IpmiExec(setup=self.setUp).marshal_raw_cmds(Service.set_conf, Service.supported_services['ssh']),
+                "solssh": IpmiExec(setup=self.setUp).marshal_raw_cmds(Service.set_conf, Service.supported_services['solssh'])
             }
-        func =  switcher.get(arglist[0], self.not_supported)
-        func(arglist[1:])
-        return

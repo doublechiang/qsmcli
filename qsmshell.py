@@ -32,25 +32,25 @@ class QsmShell(cmd2.Cmd):
         self.last_output = output
 
     def do_me(self, arg):
-        me = Me(arg)
+        me = Me(arg).run()
     def help_me(self):
         print(Me.__doc__)
     def complete_me(self, text, line, begidx, endidx):
         return [ i for i in Me.supported_cmds() if i.startswith(text)]
 
     def do_fan(self, arg):
-        fan = Fan(arg)
+        fan = Fan(arg).run()
     def help_fan(self):
         print(Fan.__doc__)
     def complete_fan(self, text, line, begidx, endidx):
         return [ i for i in Fan.supported_cmds() if i.startswith(text)]
 
     def do_service(self, arg):
-        service = Service(arg)
+        Service(arg).run()
     def help_service(self):
         print(Service.__doc__)
     def complete_serivce(self, text, line, begidx, endidx):
-        return [ i for i in Service.supported_cmds() if i.startswith(text)]
+        return [ i for i in Service().supported_cmds() if i.startswith(text)]
 
     def do_exit(self, arg):
         """ exit from the shell """
@@ -111,21 +111,21 @@ class QsmShell(cmd2.Cmd):
         print(Ipmi.__doc__)
 
     def do_mac(self, arg):
-        mac = Mac(arg)
+        mac = Mac(arg).run()
     def complete_mac(self, text, line, begidx, endidx):
         return [ i for i in Mac.supported_cmds() if i.startswith(text)]
     def help_mac(self):
         print (Mac.__doc__)
 
     def do_nic(self, arg):
-        nic = Nic(arg)
+        nic = Nic(arg).run()
     def help_nic(self):
         print(Nic.__doc__)
     def complete_nic(self, text, line, begidx, endidx):
         return [ i for i in Nic.supported_cmds() if i.startswith(text)]
 
     def do_cpld(self, arg):
-        cpld = Cpld(arg)
+        cpld = Cpld(arg).run()
     def complete_cpld(self, text, line, begidx, endidx):
         return [ i for i in Cpld.supported_cmds() if i.startswith(text)]
     def help_cpld(self):

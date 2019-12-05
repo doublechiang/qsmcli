@@ -1,12 +1,15 @@
     #!/usr/bin/env python3
 
 import os, sys
+import logging
 from globalvars import GlobalVars
 from ipmiexec import IpmiExec
 from sub_command import SubCommand
 
 class Cpld(SubCommand):
-    """ CPLD sub commands:
+    """
+    get CPLD information:
+    cpld [fw|cksum|id]
     fw: get CPLD fw
     cksum: get CPLD checksum
     id: Get CPLD idcode
@@ -16,37 +19,28 @@ class Cpld(SubCommand):
     cpld_cksum = [0x30, 0x17, 1]
     cpld_id = [0x30, 0x17, 2]
 
-    @staticmethod
-    def supported_cmds():
-        return ['fw', 'cksum', 'id']
+    supported_cmds = ['fw', 'cksum', 'id']
 
-    def invoke(self, cmdline):
-        """ Calling CPLD raw command, and parsing the output
-            Decoding is based on IPMI OEM spec.
-        """
-        exec = IpmiExec(cmdline).run(printcmd=True)
-        return bytearray.fromhex(exec.output().rstrip())
+    def __validate_arg(self, arg):
+        try:
+            if arg is None or len(arg.split()) == 0:
+                raise ValueError
 
-    def fw(self):
-        exec = IpmiExec().marshal_raw_cmds(Cpld.cpld_fw).run(printcmd=True)
-        outbuf = exec.output()
+            if len(arg.split()) > 0:
+                if not arg.split()[0] in self.cmds:
+                    raise ValueError
+        except ValueError:
+            self.not_supported()
+            return False
 
-    def cksum(self):
-        exec = IpmiExec().marshal_raw_cmds(Cpld.cpld_cksum).run(printcmd=True)
-
-    def id(self):
-        exec = IpmiExec().marshal_raw_cmds(Cpld.cpld_id).run(printcmd=True)
+        return True
 
 
-    def __init__(self, arg):
-        if len(arg.split()) == 0:
-            print (Cpld.__doc__)
-            return
-
-        switcher = {
-            "fw": self.fw,
-            "cksum": self.cksum,
-            "id": self.id,
-            }
-        func =  switcher.get(arg, self.not_supported)
-        func()
+    def __init__(self, arg=None):
+        super().__init__(arg)
+        self.cmds = {
+            "fw" : IpmiExec().marshal_raw_cmds(Cpld.cpld_fw),
+            "cksum" : IpmiExec().marshal_raw_cmds(Cpld.cpld_cksum),
+            "id" : IpmiExec().marshal_raw_cmds(Cpld.cpld_id)
+        }
+        self.__validate_arg(arg)

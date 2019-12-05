@@ -4,6 +4,7 @@ import os
 import subprocess
 import argparse
 import install
+import logging
 from qsmshell import QsmShell
 from globalvars import GlobalVars
 from mac import Mac
@@ -34,17 +35,18 @@ class Qsmcli():
 
         subp = parser.add_subparsers()
         parser_fan= subp.add_parser('fan')
-        parser_fan.add_argument('fan_sub', nargs="*", choices=Fan.supported_cmds())
+        parser_fan.add_argument('fan_sub', nargs="*", choices=Fan.supported_cmds)
         parser_service= subp.add_parser('serivce')
-        parser_service.add_argument('service_sub', nargs="*", choices=Service.supported_cmds())
+        parser_service.add_argument('service_sub', nargs="*", choices=Service.supported_cmds)
         parser_sdr= subp.add_parser('mac')
-        parser_sdr.add_argument('mac_sub', nargs="*", choices=Mac.supported_cmds())
+        #mac has single command with index followed, no supported commands follwed.
+        # parser_sdr.add_argument('mac_sub', nargs="*", choices=Mac().supported_cmds())
         parser_sdr= subp.add_parser('nic')
-        parser_sdr.add_argument('nic_sub', nargs="*", choices=Nic.supported_cmds())
+        parser_sdr.add_argument('nic_sub', nargs="*", choices=Nic.supported_cmds)
         parser_sdr= subp.add_parser('cpld')
-        parser_sdr.add_argument('cpld_sub', nargs="*", choices=Cpld.supported_cmds())
+        parser_sdr.add_argument('cpld_sub', nargs="*", choices=Cpld.supported_cmds)
         parser_sdr= subp.add_parser('me')
-        parser_sdr.add_argument('me_sub', nargs="*", choices=Me().supported_cmds())
+        parser_sdr.add_argument('me_sub', nargs="*", choices=Me.supported_cmds)
         parser_ipmi = subp.add_parser('ipmi')
         parser_ipmi.add_argument('ipmi_sub', nargs="*")
         self.args = parser.parse_args(args[1:])
@@ -87,6 +89,8 @@ class Qsmcli():
 
 
 if __name__ == "__main__":
+    logging.basicConfig(level=logging.DEBUG)
+#    logging.basicConfig(level=logging.WARNING)
     qsmcli= Qsmcli(sys.argv)
     GlobalVars.load()
     qsmcli.process_argument()
