@@ -2,43 +2,69 @@
 
 import os, sys
 import logging
+import inspect
+import ipmiexec
 from globalvars import GlobalVars
-from ipmiexec import IpmiExec
+from abc import ABC
+from abc import ABCMeta, abstractmethod
 
-class SubCommand():
 
-    """ SubCommands interface.
-        If there is no other sub commands,
+class SubCommand(ABC):
+    """ SubCommands abstract class.
+        A class, input is the command argument
+        should send out the leverage the command to next lower layer, and process the output
     """
     supported_cmds = []
+    subs = {}
 
     def not_supported(self):
         print(self.__doc__)
 
     def run(self):
-        # if command it has ipmiexec defined, then we should call it.
-        try:
-            logging.debug("self.cmds=%s", self.cmds)
-            if isinstance(self.cmds, IpmiExec):
-                logging.debug("calling %s", self.cmds)
-                self.cmds.run()
-                return
+        """ run this commands, according subs dictionary.
+            if the item value is a raw commands, then send out the command
+            if the item value is a function, then call this function, it contain dynamic method.
+            if the it contain a SubCommand, then it have more depth value.
+        """
+        logging.info('%s, base subcommands run', inspect.currentframe().f_code.co_filename)
+        token = self.arg.split()[0]             # argument is safe, get the argument
+        logging.info('subs definition %s', self.subs)
+        value = self.subs.get(token)                 # get the target objects.
+        logging.info('token=%s, value=%s', token, value)
+        if (isinstance(value, IpmiMsg)):
+            logging.info("it's IpmiMsg, token=%s", token)
+            ipmiexec.IpmiExec().run(value)
 
-            # if CMDS defined, then we should call dispatched ipmiexec objects
-            if isinstance(self.cmds, dict):
-                logging.debug("self.cmds = %s", self.cmds)
-                if len(list(self.cmds.keys())) > 0:
-                    # we can improve here, sometimes the commands without further parameter still a valid command.
-                    if len(self.arg.split()) > 0:
-                        token = self.arg.split()[0]
-                        obj = self.cmds.get(token, self.not_supported)
-                        if isinstance(obj, IpmiExec):
-                            logging.debug("value in dictionary is %s", obj)
-                            obj.run(printcmd=True)
-                            return
-        except AttributeError:
-            logging.error("Attribute has error, self.cmds=%s", self.cmds)
 
+    @abstractmethod
+    def _validate_arg():
+        pass
+
+    
     def __init__(self, arg=None):
-        logging.debug("%s, arg is %s, type is %s", self.__init__, arg, type(arg))
-        self.arg =  arg
+        self.arg = arg
+
+class IpmiMsg():
+    """ Ipmi message object.
+    """
+    def format(self):
+        """ return the parameters for ipmitool 
+        """
+        str = ""
+        if self.brdg:
+            str = str + "-t {bridge} ".format(bridge=self.brdg)
+        if self.chnl:
+            str = str + "-b {channel} ".format(channel=self.chnl)
+
+        raw_str = "raw "
+        for raw_byte in self.raw:
+            raw_str += "0x%x " % raw_byte
+
+        str = str + raw_str
+        return str
+
+    def __init__(self, raw=[], brdg=None, chnl=None):
+        self.raw = raw
+        self.brdg = brdg
+        self.chnl = chnl
+

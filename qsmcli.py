@@ -22,15 +22,17 @@ class Qsmcli():
     """ Command line mode do not preserver any settings, this will cause un-consistence.
     shell mode will try to keep the previous data as much as possible.
     """
+
+
     def __init__(self, args):
 
         parser = argparse.ArgumentParser()
         parser.add_argument("-f", "--filename", dest="filename",
-        help="Read IP addresses from the filename")
+            help="Read IP addresses from the filename")
         parser.add_argument("-U", "--username", dest="username",
-        help="Assing username for IPMI session")
+            help="Assing username for IPMI session")
         parser.add_argument("-P", "--password", dest="password",
-        help="Assing password for IPMI session")
+            help="Assing password for IPMI session")
         parser.add_argument('--version', action='version', version= '%(prog)s ' + Version().__str__()  )
 
         subp = parser.add_subparsers()
@@ -71,8 +73,8 @@ class Qsmcli():
             'fan_sub': (lambda self, x: QsmShell.do_fan(self, x)),
             'service_sub': (lambda self, x: QsmShell.do_service(self, x)),
             'ipmi_sub': (lambda self, x: QsmShell.do_ipmi(self, x)),
-            'install': (lambda self,x:QsmShell.do_install(self.x)),
-            'version': (lambda self,x:QsmShell.do_version(self.x)),
+            'install': (lambda self,x: QsmShell.do_install(self.x)),
+            'version': (lambda self,x: QsmShell.do_version(self.x)),
         }
         cmd_mode=None
         for key, func in sub_commands.items():
@@ -89,8 +91,8 @@ class Qsmcli():
 
 
 if __name__ == "__main__":
-    logging.basicConfig(level=logging.DEBUG)
-#    logging.basicConfig(level=logging.WARNING)
+#    logging.basicConfig(level=logging.DEBUG)
+    logging.basicConfig(level=logging.INFO)
     qsmcli= Qsmcli(sys.argv)
     GlobalVars.load()
     qsmcli.process_argument()
