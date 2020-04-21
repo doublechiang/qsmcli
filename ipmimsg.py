@@ -27,3 +27,10 @@ class IpmiMsg():
         self.brdg = brdg
         self.chnl = chnl
 
+
+    def __eq__(self, other):
+        if self.raw == other.raw and self.brdg == other.brdg and self.chnl == other.chnl:
+            return True
+        return False
+
+
