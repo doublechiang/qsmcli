@@ -14,6 +14,7 @@ from service import Service
 from install import Install
 from version import Version
 from me import Me
+from ipmi import Ipmi
 
 class QsmShell(cmd2.Cmd):
 
@@ -33,11 +34,11 @@ class QsmShell(cmd2.Cmd):
 
     def do_me(self, arg):
         logging.info('arg=%s', arg)
-        Me(arg).run()
+        Me().run(arg)
     def help_me(self):
         print(Me.__doc__)
     def complete_me(self, text, line, begidx, endidx):
-        return [ i for i in Me.supported_cmds if i.startswith(text)]
+        return [ i for i in Me().supported_cmds if i.startswith(text)]
 
     def do_fan(self, arg):
         Fan(arg).run()
@@ -68,7 +69,7 @@ class QsmShell(cmd2.Cmd):
         return [ i for i in Nic.supported_cmds if i.startswith(text)]
 
     def do_cpld(self, arg):
-        Cpld(arg).run()
+        Cpld().run(arg)
     def complete_cpld(self, text, line, begidx, endidx):
         return [ i for i in Cpld.supported_cmds if i.startswith(text)]
     def help_cpld(self):
@@ -127,7 +128,7 @@ class QsmShell(cmd2.Cmd):
             print (GlobalVars.host)
 
     def do_ipmi(self, arg):
-        Ipmi(arg)
+        Ipmi().run(arg)
     def help_ipmi(self):
         print(Ipmi.__doc__)
 
