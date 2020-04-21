@@ -5,6 +5,7 @@ import subprocess
 import logging
 import sub_command
 from globalvars import GlobalVars
+from ipmimsg import IpmiMsg
 
 class IpmiExec():
     """ IPMI command Helper laye to execute the commands
@@ -13,7 +14,7 @@ class IpmiExec():
     def output(self):
         return self.stdout
 
-    def run(self, msg:sub_command.IpmiMsg, printcmd=True):
+    def run(self, msg:IpmiMsg, printcmd=True):
         logging.info("Ipmiexec.run() is called, msgobj=%s", msg)
         # if there is no existing command, we will composing one
         cmd = GlobalVars.host_access() + msg.format()

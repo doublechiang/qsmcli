@@ -46,9 +46,9 @@ class Qsmcli():
         parser_sdr= subp.add_parser('nic')
         parser_sdr.add_argument('nic_sub', nargs="*", choices=Nic.supported_cmds)
         parser_sdr= subp.add_parser('cpld')
-        parser_sdr.add_argument('cpld_sub', nargs="*", choices=Cpld.supported_cmds)
+        parser_sdr.add_argument('cpld_sub', nargs="*", choices=Cpld().supported_cmds)
         parser_sdr= subp.add_parser('me')
-        parser_sdr.add_argument('me_sub', nargs="*", choices=Me.supported_cmds)
+        parser_sdr.add_argument('me_sub', nargs="*", choices=Me().supported_cmds)
         parser_ipmi = subp.add_parser('ipmi')
         parser_ipmi.add_argument('ipmi_sub', nargs="*")
         self.args = parser.parse_args(args[1:])
@@ -92,7 +92,8 @@ class Qsmcli():
 
 if __name__ == "__main__":
 #    logging.basicConfig(level=logging.DEBUG)
-    logging.basicConfig(level=logging.INFO)
+#    logging.basicConfig(level=logging.INFO)
+    logging.basicConfig(level=logging.WARNING)
     qsmcli= Qsmcli(sys.argv)
     GlobalVars.load()
     qsmcli.process_argument()

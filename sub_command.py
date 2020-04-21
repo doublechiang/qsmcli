@@ -4,7 +4,7 @@ import os, sys
 import logging
 import inspect
 import ipmiexec
-from globalvars import GlobalVars
+from ipmimsg import IpmiMsg
 from abc import ABC
 from abc import ABCMeta, abstractmethod
 
@@ -33,7 +33,7 @@ class SubCommand(ABC):
             print(action)
 
     def getAction(self, arg):
-        """ According to the parameter, return the action.
+        """ return IpmiMsg/Function/SubCommand drived class.
         """
         params = arg.split()
         if (len(params) > 0 ):
@@ -43,8 +43,6 @@ class SubCommand(ABC):
                 if token in self.subs:
                     return self.subs.get(token)  
         return self.__doc__
-
-
     
     def __init__(self, arg=None):
         # If the subs contain a list, then it's the support commands for reference
