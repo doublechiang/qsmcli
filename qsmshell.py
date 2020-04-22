@@ -48,14 +48,14 @@ class QsmShell(cmd2.Cmd):
         return [ i for i in Fan().supported_cmds if i.startswith(text)]
 
     def do_service(self, arg):
-        Service(arg).run()
+        Service().run(arg)
     def help_service(self):
         print(Service.__doc__)
     def complete_serivce(self, text, line, begidx, endidx):
         return [ i for i in Service.supported_cmds if i.startswith(text)]
 
     def do_mac(self, arg):
-        Mac(arg).run()
+        Mac().run(arg)
     def complete_mac(self, text, line, begidx, endidx):
         return [ i for i in Mac.supported_cmds if i.startswith(text)]
     def help_mac(self):

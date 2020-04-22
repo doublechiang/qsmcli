@@ -36,14 +36,20 @@ class SubCmd(ABC):
 
     def getAction(self, arg):
         """ return IpmiMsg/Function/SubCommand drived class.
+            depends on the instance attribute subs type
+            if it's not a dictionary, then it's an action it self.
+            If it's a action, then according to the argument to choose the required action.
         """
-        params = arg.split()
-        if (len(params) > 0 ):
-            token = params[0]
-            logging.info('token=%s, subs=%s', token, self.subs)
-            if (isinstance(self.subs, dict)):
-                if token in self.subs:
-                    return self.subs.get(token)  
+        if not isinstance(self.subs, dict):
+            return self.subs
+        else:
+            params = arg.split()
+            if (len(params) > 0 ):
+                token = params[0]
+                logging.info('token=%s, subs=%s', token, self.subs)
+                if (isinstance(self.subs, dict)):
+                    if token in self.subs:
+                        return self.subs.get(token)  
         return self.__doc__
 
     def composeList(self, params, *argv):
@@ -65,6 +71,7 @@ class SubCmd(ABC):
         """
         if isinstance(cmds, dict):
             return cmds.keys()
+        return []
     
 
 
