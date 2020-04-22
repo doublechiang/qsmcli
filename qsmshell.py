@@ -52,26 +52,26 @@ class QsmShell(cmd2.Cmd):
     def help_service(self):
         print(Service.__doc__)
     def complete_serivce(self, text, line, begidx, endidx):
-        return [ i for i in Service.supported_cmds if i.startswith(text)]
+        return [ i for i in Service().supported_cmds if i.startswith(text)]
 
     def do_mac(self, arg):
         Mac().run(arg)
     def complete_mac(self, text, line, begidx, endidx):
-        return [ i for i in Mac.supported_cmds if i.startswith(text)]
+        return [ i for i in Mac().supported_cmds if i.startswith(text)]
     def help_mac(self):
         print (Mac.__doc__)
 
     def do_nic(self, arg):
-        Nic(arg).run()
+        Nic().run(arg)
     def help_nic(self):
         print(Nic.__doc__)
     def complete_nic(self, text, line, begidx, endidx):
-        return [ i for i in Nic.supported_cmds if i.startswith(text)]
+        return [ i for i in Nic().supported_cmds if i.startswith(text)]
 
     def do_cpld(self, arg):
         Cpld().run(arg)
     def complete_cpld(self, text, line, begidx, endidx):
-        return [ i for i in Cpld.supported_cmds if i.startswith(text)]
+        return [ i for i in Cpld().supported_cmds if i.startswith(text)]
     def help_cpld(self):
         print (Cpld.__doc__)
 

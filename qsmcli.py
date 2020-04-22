@@ -44,7 +44,7 @@ class Qsmcli():
         #mac has single command with index followed, no supported commands follwed.
         # parser_sdr.add_argument('mac_sub', nargs="*", choices=Mac().supported_cmds())
         parser_sdr= subp.add_parser('nic')
-        parser_sdr.add_argument('nic_sub', nargs="*", choices=Nic.supported_cmds)
+        parser_sdr.add_argument('nic_sub', nargs="*", choices=Nic().supported_cmds)
         parser_sdr= subp.add_parser('cpld')
         parser_sdr.add_argument('cpld_sub', nargs="*", choices=Cpld().supported_cmds)
         parser_sdr= subp.add_parser('me')

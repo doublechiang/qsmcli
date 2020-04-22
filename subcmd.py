@@ -72,6 +72,11 @@ class SubCmd(ABC):
         if isinstance(cmds, dict):
             return cmds.keys()
         return []
+
+    def __init__(self):
+        # default value for interface.
+        self.supported_cmds = []
+        self.subs = {}
     
 
 
