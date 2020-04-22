@@ -2,11 +2,12 @@
 
 import os, sys
 import logging
+import subcmd
 from globalvars import GlobalVars
 from ipmiexec import IpmiExec
-from sub_command import SubCommand
 
-class Mac(SubCommand):
+
+class Mac(subcmd.SubCmd):
     """
     get system mac command and print out the system mac we have
     mac [index], index range from 0 to 5

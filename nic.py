@@ -2,11 +2,11 @@
 
 import os, sys
 import logging
+import subcmd
 from globalvars import GlobalVars
 from ipmiexec import IpmiExec
-from sub_command import SubCommand
 
-class Nic(SubCommand):
+class Nic(subcmd.SubCmd):
     """
     get, set the BMC dedicate/share NIC
     nic [dedicate|lom-share|mezz-share0|mizz-share1]

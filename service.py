@@ -2,11 +2,10 @@
 
 import os, sys
 import logging
-from globalvars import GlobalVars
-from sub_command import SubCommand
+import subcmd
 from ipmiexec import IpmiExec
 
-class Service(SubCommand):
+class Service(subcmd.SubCmd):
     """
     eanble/disable Service commands:
     service [web|kvm|cd-media|hd-media|ssh|solssh] [enable/disable]

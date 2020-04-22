@@ -2,57 +2,53 @@
 
 import os, sys
 import logging
-from globalvars import GlobalVars
-from sub_command import SubCommand
+import inspect
+import subcmd
+from ipmimsg import IpmiMsg
 from ipmiexec import IpmiExec
 
-class Fan(SubCommand):
+
+class Fan(subcmd.SubCmd):
     """ fan commands: duty and auto to set fan duty and auto fan speed control.
     fan duty [index] [duty]
-    :index fan index number
+    :index fan index number [0-7]
     :duty 1-100
     fan auto
-    description: set the fan in manual mode.
+    description: set the fan in manual or in auto mode
     """
-    supported_cmds = ['auto', 'duty']
-
     AUTO_CMD = [ 0x30, 0x39, 1, 0xf0, 0xff, 0xff]
     DUTY_CMD = [ 0x30, 0x39, 0, 0]
 
-    def setUp(self, ipmiexec):
+    def duty(self, arg):
         """ Callback function for fan duty parameters
         geneate the index and the duty for "fan duty" command
         """
-        print(Fan.DUTY_CMD)
-        logging.debug("composing FAN duty cmds=%s, %s, %s", Fan.DUTY_CMD, self.index, self.duty)
-        ipmiexec.marshal_raw_cmds(Fan.DUTY_CMD, [self.index, self.duty])
-
-    def __validate_arg(self, arg):
+        logging.info('%s, arg=%s', inspect.currentframe().f_code.co_filename, arg)
         try:
-            token=arg.split()
-            if len(token) != 3:
-                raise ValueError
-            # check if fan index between 0-7
-            val1 = int(token[1])
-            if (val1 < 0) or (val1 > 7):
-                raise ValueEerror
-            self.index = val1
-            val2 = int(token[2])
-            if (val2 < 1 ) or (val2 > 100):
-                raise ValueError
-            self.duty = val2
-        except:
-            self.not_supported()
-            return False
-        return True
+            index, duty = self.__parse_arg(arg)
+            cmd = self.composeList(Fan.DUTY_CMD, index, duty)
+            IpmiExec().run(IpmiMsg(cmd))
+        except ValueError:
+            print(self.__doc__)
 
+    def __parse_arg(self, arg):
+        token=arg.split()
+        if len(token) != 3:
+            raise ValueError
+        # check if fan index between 0-7
+        val1 = int(token[1])
+        if (val1 < 0) or (val1 > 7):
+            raise ValueError
+        val2 = int(token[2])
+        if (val2 < 1 ) or (val2 > 100):
+            raise ValueError
+        return (val1, val2)
 
 
     def __init__(self, arg=None):
-        super().__init__(arg)
 
-        self.cmds = {
-            "duty" : IpmiExec(setup=self.setUp).marshal_raw_cmds(Fan.DUTY_CMD),
-            "auto" : IpmiExec().marshal_raw_cmds(Fan.AUTO_CMD),
+        self.subs = {
+            "duty" : self.duty,
+            "auto" : IpmiMsg(Fan.AUTO_CMD),
         }
-        self.__validate_arg(arg)
+        self.supported_cmds = self._buildSupportCmds(self.subs)

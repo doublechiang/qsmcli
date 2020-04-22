@@ -2,12 +2,10 @@
 
 import os, sys
 import logging
-from globalvars import GlobalVars
-from ipmiexec import IpmiExec
+import subcmd
 from ipmimsg import IpmiMsg
-from sub_command import SubCommand
 
-class Cpld(SubCommand):
+class Cpld(subcmd.SubCmd):
     """
     get CPLD information:
     cpld [fw|cksum|id]
@@ -22,5 +20,6 @@ class Cpld(SubCommand):
             'cksum' : IpmiMsg([0x30, 0x17, 1]),
             'id' : IpmiMsg([0x30, 0x17, 2])
             }
-        super().__init__(arg)
+        self.supported_cmds = self._buildSupportCmds(self.subs)
+
 

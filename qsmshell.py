@@ -41,11 +41,11 @@ class QsmShell(cmd2.Cmd):
         return [ i for i in Me().supported_cmds if i.startswith(text)]
 
     def do_fan(self, arg):
-        Fan(arg).run()
+        Fan().run(arg)
     def help_fan(self):
         print(Fan.__doc__)
     def complete_fan(self, text, line, begidx, endidx):
-        return [ i for i in Fan.supported_cmds if i.startswith(text)]
+        return [ i for i in Fan().supported_cmds if i.startswith(text)]
 
     def do_service(self, arg):
         Service(arg).run()

@@ -3,11 +3,11 @@
 import os, sys
 import logging
 import inspect
+import subcmd
 from ipmiexec import IpmiExec
-from sub_command import SubCommand
 from ipmimsg import IpmiMsg
 
-class Me(SubCommand):
+class Me(subcmd.SubCmd):
     """
     Query ME related information.
     me [version|cpu|dimm|io] 
@@ -25,5 +25,5 @@ class Me(SubCommand):
             'dimm' : IpmiMsg([0x4, 0x2d, 0xc0], brdg=0x2c, chnl=6),
             'io': IpmiMsg( [0x4, 0x2d, 0xbf], brdg=0x2c, chnl=6)
             }
-        super().__init__(arg)
+        self.supported_cmds = self._buildSupportCmds(self.subs)
 

@@ -3,7 +3,7 @@
 import os, sys
 import subprocess
 import logging
-import sub_command
+import subcmd
 from globalvars import GlobalVars
 from ipmimsg import IpmiMsg
 

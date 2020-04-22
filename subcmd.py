@@ -9,7 +9,7 @@ from abc import ABC
 from abc import ABCMeta, abstractmethod
 
 
-class SubCommand(ABC):
+class SubCmd(ABC):
     """
         Definition of subs.
         There are 3 types commands action, they are IpmiMsg, Fucntion or a Dictionary
@@ -29,6 +29,8 @@ class SubCommand(ABC):
         action = self.getAction(arg)
         if (isinstance(action, IpmiMsg)):
             ipmiexec.IpmiExec().run(action)
+        elif hasattr(action, '__call__'):
+            action(arg)
         elif isinstance(action, str):
             print(action)
 
@@ -43,11 +45,26 @@ class SubCommand(ABC):
                 if token in self.subs:
                     return self.subs.get(token)  
         return self.__doc__
+
+    def composeList(self, params, *argv):
+        """ Compose everything into a list
+        """
+        result = params.copy()
+        if not isinstance(params, list):
+            result = [params]
+        for item in argv:
+            if isinstance(item, list):
+                result = result + item
+            else:
+                result.append(item)
+        return result
+            
+
+    def _buildSupportCmds(self, cmds):
+        """ Helper function to build the support commands for the list
+        """
+        if isinstance(cmds, dict):
+            return cmds.keys()
     
-    def __init__(self, arg=None):
-        # If the subs contain a list, then it's the support commands for reference
-        logging.info('init..., self.subs =%s', self.subs)
-        if isinstance(self.subs, dict):
-            self.supported_cmds = self.subs.keys()
 
 

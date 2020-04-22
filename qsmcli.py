@@ -37,7 +37,7 @@ class Qsmcli():
 
         subp = parser.add_subparsers()
         parser_fan= subp.add_parser('fan')
-        parser_fan.add_argument('fan_sub', nargs="*", choices=Fan.supported_cmds)
+        parser_fan.add_argument('fan_sub', nargs="*", choices=Fan().supported_cmds)
         parser_service= subp.add_parser('serivce')
         parser_service.add_argument('service_sub', nargs="*", choices=Service.supported_cmds)
         parser_sdr= subp.add_parser('mac')
@@ -92,8 +92,8 @@ class Qsmcli():
 
 if __name__ == "__main__":
 #    logging.basicConfig(level=logging.DEBUG)
-#    logging.basicConfig(level=logging.INFO)
-    logging.basicConfig(level=logging.WARNING)
+    logging.basicConfig(level=logging.INFO)
+#    logging.basicConfig(level=logging.WARNING)
     qsmcli= Qsmcli(sys.argv)
     GlobalVars.load()
     qsmcli.process_argument()
