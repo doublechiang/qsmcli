@@ -39,7 +39,7 @@ class Qsmcli():
         parser_fan= subp.add_parser('fan')
         parser_fan.add_argument('fan_sub', nargs="*", choices=Fan().supported_cmds)
         parser_service= subp.add_parser('serivce')
-        parser_service.add_argument('service_sub', nargs="*", choices=Service.supported_cmds)
+        parser_service.add_argument('service_sub', nargs="*", choices=Service().supported_cmds)
         parser_sdr= subp.add_parser('mac')
         #mac has single command with index followed, no supported commands follwed.
         # parser_sdr.add_argument('mac_sub', nargs="*", choices=Mac().supported_cmds())
