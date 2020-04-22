@@ -55,8 +55,9 @@ class SubCmd(ABC):
     def composeList(self, params, *argv):
         """ Compose everything into a list
         """
-        result = params.copy()
-        if not isinstance(params, list):
+        if isinstance(params, list):
+            result = params.copy()
+        else:
             result = [params]
         for item in argv:
             if isinstance(item, list):
