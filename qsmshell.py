@@ -3,9 +3,9 @@
 import sys
 import os
 import cmd2
+import logging
 
 from globalvars import GlobalVars
-import logging
 from nic import Nic
 from mac import Mac
 from cpld import Cpld
@@ -31,49 +31,6 @@ class QsmShell(cmd2.Cmd):
         output = os.popen(line).read()
         print (output)
         self.last_output = output
-
-    def do_me(self, arg):
-        logging.info('arg=%s', arg)
-        Me().run(arg)
-    def help_me(self):
-        print(Me.__doc__)
-    def complete_me(self, text, line, begidx, endidx):
-        return [ i for i in Me().supported_cmds if i.startswith(text)]
-
-    def do_fan(self, arg):
-        Fan().run(arg)
-    def help_fan(self):
-        print(Fan.__doc__)
-    def complete_fan(self, text, line, begidx, endidx):
-        return [ i for i in Fan().supported_cmds if i.startswith(text)]
-
-    def do_service(self, arg):
-        Service().run(arg)
-    def help_service(self):
-        print(Service.__doc__)
-    def complete_serivce(self, text, line, begidx, endidx):
-        return [ i for i in Service().supported_cmds if i.startswith(text)]
-
-    def do_mac(self, arg):
-        Mac().run(arg)
-    def complete_mac(self, text, line, begidx, endidx):
-        return [ i for i in Mac().supported_cmds if i.startswith(text)]
-    def help_mac(self):
-        print (Mac.__doc__)
-
-    def do_nic(self, arg):
-        Nic().run(arg)
-    def help_nic(self):
-        print(Nic.__doc__)
-    def complete_nic(self, text, line, begidx, endidx):
-        return [ i for i in Nic().supported_cmds if i.startswith(text)]
-
-    def do_cpld(self, arg):
-        Cpld().run(arg)
-    def complete_cpld(self, text, line, begidx, endidx):
-        return [ i for i in Cpld().supported_cmds if i.startswith(text)]
-    def help_cpld(self):
-        print (Cpld.__doc__)
 
     def do_exit(self, arg):
         """ exit from the shell """
@@ -127,32 +84,39 @@ class QsmShell(cmd2.Cmd):
         else:
             print (GlobalVars.host)
 
-    def do_ipmi(self, arg):
-        Ipmi().run(arg)
-    def help_ipmi(self):
-        print(Ipmi.__doc__)
-
-    def do_install(self, arg):
-        """ Install this application into system path
-        """
-        Install(arg)
-    def help_install(self):
-        print(Install.__doc__)
-
-    def do_version(self, arg):
-        """ Install this application into system path
-        """
-        print(Version())
-    def help_version(self):
-        print(Version.__doc__)
-
     def do_EOF(self, arg):
         return True
 
+    def regCmds(self, cmds):
+        """ Register all of the support commands into cmd2
+        """
+        for cmd in cmds:
+            self.regCmd(cmd)
+
+    def regCmd(self, cmd):
+        """ based cmd name to register the method with 
+            do_xxx
+            help_xxx
+            complete_xxx 
+        """
+        exec("from {} import {}".format(cmd, cmd.capitalize()))
+        funcdef = "def do_{}(self, arg): {}().run(arg)".format(cmd, cmd.capitalize())
+        assign = "QsmShell.do_{0} = do_{0}".format(cmd)
+        exec(funcdef)
+        exec(assign)
+        funcdef = "def help_{}(self): print({}.__doc__)".format(cmd, cmd.capitalize())
+        assign = "QsmShell.help_{0} = help_{0}".format(cmd)
+        exec(funcdef)
+        exec(assign)
+        funcdef = """def complete_{}(self, text, line, begidx, endidx):
+                        return [ i for i in {}().supported_cmds if i.startswith(text)]
+                        """.format(cmd, cmd.capitalize())
+        assign = "QsmShell.complete_{0} = complete_{0}".format(cmd)
+        exec(funcdef)
+        exec(assign)
 
 
 if __name__ == '__main__':
-    if len(sys.argv) > 1:
-        QsmShell.onecmd(' '.join(sys.argv[1:]))
-    else:
-        QsmShell().cmdloop()
+    if len(sys.argv) == 1:
+        shell = QsmShell()
+        shell.cmdloop()

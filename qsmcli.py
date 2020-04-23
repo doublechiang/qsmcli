@@ -22,6 +22,8 @@ class Qsmcli():
     """ Command line mode do not preserver any settings, this will cause un-consistence.
     shell mode will try to keep the previous data as much as possible.
     """
+    Cmds = ['me', 'fan', 'service', 'nic', 'cpld', 'mac', 'ipmi', 'install', 'version']
+
 
 
     def __init__(self, args):
@@ -87,13 +89,14 @@ class Qsmcli():
         if cmd_mode is not True:
             shell = QsmShell(persistent_history_file= GlobalVars.get_history_file_path())
             shell.setPrompt()
+            shell.regCmds(Qsmcli.Cmds)
             shell.cmdloop()
 
 
 if __name__ == "__main__":
 #    logging.basicConfig(level=logging.DEBUG)
-    logging.basicConfig(level=logging.INFO)
-#    logging.basicConfig(level=logging.WARNING)
+#    logging.basicConfig(level=logging.INFO)
+    logging.basicConfig(level=logging.WARNING)
     qsmcli= Qsmcli(sys.argv)
     GlobalVars.load()
     qsmcli.process_argument()
