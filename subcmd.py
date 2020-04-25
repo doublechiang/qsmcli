@@ -3,7 +3,10 @@
 import os, sys
 import logging
 import inspect
+
+# local moduels defined below
 import ipmiexec
+from interface import Interface
 from ipmimsg import IpmiMsg
 from abc import ABC
 from abc import ABCMeta, abstractmethod

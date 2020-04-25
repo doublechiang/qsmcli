@@ -1,6 +1,11 @@
 # qsmcli
 Q system management command line tool
 
+# Installation
+You will need to install python3 first.
+And then 
+    # pip3 install -r requirements.txt
+
 ## supported shell mode and command
 
 ### Command line mode
@@ -15,7 +20,7 @@ The host and username/password is saved in the prompt.
 Any command with help command involved will print the help message.
 
 ### ipmi
-This is the command to redirect all of the command to ipmi interface
+This is the command to redirect all of the command to ipmitool
 
 ### mac
 get system mac command and print out the system mac we have

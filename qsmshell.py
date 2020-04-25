@@ -4,8 +4,11 @@ import sys
 import os
 import cmd2
 import logging
+import inspect
 
-from globalvars import GlobalVars
+# local modules
+from config import Config
+from interface import Interface
 from nic import Nic
 from mac import Mac
 from cpld import Cpld
@@ -37,52 +40,64 @@ class QsmShell(cmd2.Cmd):
         return True
 
     def setPrompt(self):
-        QsmShell.prompt = GlobalVars.host + ":" +  GlobalVars.username + "(" + GlobalVars.password +")>"
+        QsmShell.prompt = "{}:{}({})>".format(self.env['host'], self.env['user'], self.env['passw'])
 
-    def do_username(self, arg):
-        """ username [name_to_be_changed]
-            print the username
-            username [name]: assign the new name to usernmae parameter"""
-        if arg:
-            GlobalVars.username = arg.split()[0]
-            QsmShell.setPrompt(self)
-        else:
-            print (GlobalVars.username)
+    def do_user(self, arg):
+        """ user [name_to_be_changed]
+            user [name]: assign the new password
+        """
+        if len(arg.split()) > 0:
+            self.env['user'] = arg.split()[0]
+            self.setPrompt()
+            Config().current = self.env
+            self.__update_hosts()
 
-    def do_password(self, arg):
-        """ password [name_to_be_changed]
-            print the current password
-            password [name]: assign the new password"""
-        if arg:
-            GlobalVars.password = arg.split()[0]
-            QsmShell.setPrompt(self)
-        else:
-            print (GlobalVars.username)
+    def do_passw(self, arg):
+        """ passw [name_to_be_changed]
+            passw [name]: assign the new password
+        """
+        if len(arg.split()) > 0:
+            self.env['passw'] = arg.split()[0]
+            self.setPrompt()
+            Config().current = self.env
+            self.__update_hosts()
 
     def do_host(self, arg):
-        """ host [host_to_be_managed]
-            print the current host ip address
-            host [ip] [username] [password]: assign the new ip address
+        """ host commands to switch the host ip.
+            host [ip] [username] [password]: assign the new credentials
             if username and password are supplied, it will change the host/username/password in one command.
         """
-        if arg:
-            GlobalVars.host = arg.split()[0]
-            # if a single host switch only command, chheck if history has credentials or not
-            if len(arg.split()) == 1:
-                credential = GlobalVars.get_host_credential(GlobalVars.host)
-                if credential:
-                    GlobalVars.username = credential.get(GlobalVars.KEY_USERNAME, "")
-                    GlobalVars.password = credential.get(GlobalVars.KEY_PASSWORD, "")
-            if len(arg.split()) > 1:
-                GlobalVars.username = arg.split()[1]
-            if len(arg.split()) > 2:
-                GlobalVars.password = arg.split()[2]
-            QsmShell.setPrompt(self)
-            GlobalVars.update_host_credential(GlobalVars.host, GlobalVars.username, GlobalVars.password)
+        count = len(arg.split())
+        if count > 0:
+            host = arg.split()[0]
+            self.env['host'] = host
+            Config().current = self.env
+            hosts = Config().hosts
 
+            if count == 1:
+                # if only host is provided, then check if host has been saved before
+                # if exist, then use the previous user & passw
+                cred = hosts.get(self.env['host'])
+                if cred:
+                    self.env['user'] = cred['username']
+                    self.env['passw'] = cred['password']
+            elif count > 1:
+                # Any far more prameter need to update origin database.
+                self.env['user'] = arg.split()[1]
+                if count > 2:
+                    # updat the password too.
+                    self.env['passw'] = arg.split()[2]
+                self.__update_hosts()
+        self.setPrompt()
 
-        else:
-            print (GlobalVars.host)
+    def __update_hosts(self):
+        """ If all the host, users & password is not empty, update the configuration.
+        """
+        if self.env['host'] and self.env['user'] and self.env['passw']:
+            hosts = Config().hosts
+            cred = {'username': self.env['user'], 'password': self.env['passw']}
+            hosts[self.env['host']] = cred
+            Config().hosts = hosts
 
     def do_EOF(self, arg):
         return True
@@ -99,8 +114,8 @@ class QsmShell(cmd2.Cmd):
             help_xxx
             complete_xxx 
         """
-        exec("from {} import {}".format(cmd, cmd.capitalize()))
-        funcdef = "def do_{}(self, arg): {}().run(arg)".format(cmd, cmd.capitalize())
+        funcdef = """def do_{}(self, arg):
+                {}().run(arg)""".format(cmd, cmd.capitalize())
         assign = "QsmShell.do_{0} = do_{0}".format(cmd)
         exec(funcdef)
         exec(assign)
@@ -115,8 +130,11 @@ class QsmShell(cmd2.Cmd):
         exec(funcdef)
         exec(assign)
 
+    def __init__(self, **kwarg):
+        """ load the shell environment from config
+        """
+        self.env = Config().current
+        self.setPrompt()
+        super().__init__(**kwarg)
 
-if __name__ == '__main__':
-    if len(sys.argv) == 1:
-        shell = QsmShell()
-        shell.cmdloop()
+

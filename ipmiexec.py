@@ -4,8 +4,11 @@ import os, sys
 import subprocess
 import logging
 import subcmd
-from globalvars import GlobalVars
+
+# local modules definition below
+from interface import Interface
 from ipmimsg import IpmiMsg
+from config import Config
 
 class IpmiExec():
     """ IPMI command Helper laye to execute the commands
@@ -15,9 +18,14 @@ class IpmiExec():
         return self.stdout
 
     def run(self, msg:IpmiMsg, printcmd=True):
+        """ hostenv is a dictionary contain host ip & username/password
+        """
         logging.info("Ipmiexec.run() is called, msgobj=%s", msg)
+        print(Config().current)
+        ntrfce = Interface(**Config().current)
+
         # if there is no existing command, we will composing one
-        cmd = GlobalVars.host_access() + msg.format()
+        cmd = "ipmitool {}{}".format(ntrfce.format(), msg.format())
         if (printcmd):
             print(cmd)
         completed = subprocess.run(cmd.split(), universal_newlines = True, stdout=subprocess.PIPE)
@@ -27,3 +35,5 @@ class IpmiExec():
             print(self.stdout)
 
         return self
+
+
