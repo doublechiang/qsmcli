@@ -2,9 +2,15 @@
 
 import os
 import sys
-from globalvars import GlobalVars
+import logging
 
-class Install():
+# third pary librarys
+from elevate import elevate
+
+# local modules
+import subcmd
+
+class Install(subcmd.SubCmd):
 
     """ Install this application into OS's path library
         In Linux, create the symbloic link in the /usr/local/bin
@@ -13,18 +19,25 @@ class Install():
 
     WINBAT='qsmcli.bat'
 
+    def install(self, arg=None):
+        if ('posix' == os.name):
+            self.install_in_linux(arg)
+        else:
+            self.install_in_win(arg)
+
+
     def install_in_linux(self, arg):
         """ Create the symbolic name in /usr/local/bin directory
         """
         LOCAL_BIN='/usr/local/bin/'
+        elevate(graphical=False)
         basename = os.path.splitext(os.path.basename(sys.argv[0]))[0]
-        dir = os.path.abspath(os.path.dirname(sys.argv[0]))
         src = os.path.abspath(sys.argv[0])
         dest = LOCAL_BIN+basename
         if os.path.isfile(dest):
-            print("Destination file %s exist, overwriting it." % dest)
+            logging.warning("Destination file %s exist, overwriting it.", dest)
             os.unlink(dest)
-        print("Creating symbolic link %s to %s " & (dest, src))
+        logging.critical("Creating symbolic link %s to %s ", dest, src)
         os.symlink(src, dest)
 
     def install_in_win(self, arg):
@@ -49,9 +62,8 @@ class Install():
             # Create the batch file
             pgm = os.path.abspath(sys.argv[0])
             with open(winbat_file, 'w') as bat_file:
-                print("creating %s" %winbat_file)
+                print("creating %s" % winbat_file)
                 bat_file.write("start \"\" \"%s\" %*" % pgm)
-                bat_file.close()
 
         except IOError:
             print("Write file error, run program as administrator")
@@ -59,9 +71,5 @@ class Install():
         except:
             print("Please return error to author for your money back")
 
-
-    def __init__(self, arg):
-        if ('posix' == os.name):
-            self.install_in_linux(arg)
-        else:
-            self.install_in_win(arg)
+    def __init__(self):
+        self.subs =  self.install
