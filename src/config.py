@@ -31,16 +31,21 @@ class Config:
                 json.dump(config, json_file)
 
         def load(self):
-            with open(self.storefn, 'r') as json_file:
-                config=json.load(json_file)
-                if isinstance(config, dict):
-                    self.current = config.get('current')
-                    if not isinstance(self.current, dict):
-                        self.current = {'host':"", 'user': "", 'passw': ""}
+            try:
+                with open(self.storefn, 'r') as json_file:
+                    config=json.load(json_file)
+                    if isinstance(config, dict):
+                        self.current = config.get('current')
+                        if not isinstance(self.current, dict):
+                            self.current = {'host':"", 'user': "", 'passw': ""}
 
-                    self.hosts = config.get('hosts')
-                    if not isinstance(self.hosts, dict):
-                        self.hosts = {}
+                        self.hosts = config.get('hosts')
+                        if not isinstance(self.hosts, dict):
+                            self.hosts = {}
+            except FileNotFoundError:
+                self.current={'host':'', 'user':'', 'passw':''}
+                self.hosts={}
+
             
         def __str__(self):
             return repr(self)

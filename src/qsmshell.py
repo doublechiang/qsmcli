@@ -40,7 +40,7 @@ class QsmShell(cmd2.Cmd):
         return True
 
     def setPrompt(self):
-        QsmShell.prompt = "{}:{}({})>".format(self.env['host'], self.env['user'], self.env['passw'])
+        QsmShell.prompt = "{}:{}({})>".format(self.env.get('host'), self.env.get('user'), self.env.get('passw'))
 
     def do_user(self, arg):
         """ user [name_to_be_changed]
