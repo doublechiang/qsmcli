@@ -3,7 +3,6 @@ import sys
 import os
 import subprocess
 import argparse
-import install
 import logging
 
 # local modules
@@ -14,7 +13,6 @@ from nic import Nic
 from fan import Fan
 from service import Service
 from me import Me
-
 from config import Config
 from install import Install
 from version import Version

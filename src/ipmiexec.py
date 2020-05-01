@@ -21,7 +21,6 @@ class IpmiExec():
         """ hostenv is a dictionary contain host ip & username/password
         """
         logging.info("Ipmiexec.run() is called, msgobj=%s", msg)
-        print(Config().current)
         ntrfce = Interface(**Config().current)
 
         # if there is no existing command, we will composing one
