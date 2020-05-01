@@ -34,7 +34,7 @@ fw: get CPLD fw
 cksum: get CPLD checksum
 id: Get CPLD idcode
 
-### ME
+### me
 Query ME related information.
 me [version|cpu|dimm|io]
 me version: to get ME version
@@ -42,7 +42,7 @@ me cpu: to get CPU utililization
 me dimm: to get DIMM utililization
 me io: to get IO utilization
 
-### NIC
+### nic
 get, set the BMC dedicate/share NIC
 nic [dedicate|lom-share|mezz-share0|mizz-share1]
 
@@ -52,7 +52,7 @@ For LAN Card Type,
 2h- Shared NIC (OCP Mezzanine slot)
 3h- Shared NIC (QCT Mezzanine slot)
 
-### Services
+### service
 eanble/disable Service commands:
 service [enable/disable] [web|kvm|cd-media|hd-media|ssh|solssh]
 Please notice this utility will get the service configuration data and
