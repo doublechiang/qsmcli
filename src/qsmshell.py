@@ -88,7 +88,9 @@ class QsmShell(cmd2.Cmd):
                     # updat the password too.
                     self.env['passw'] = arg.split()[2]
                 self.__update_hosts()
-        self.setPrompt()
+            # 
+            Config().current = self.env
+            self.setPrompt()
 
     def __update_hosts(self):
         """ If all the host, users & password is not empty, update the configuration.
