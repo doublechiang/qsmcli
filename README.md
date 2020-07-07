@@ -2,9 +2,11 @@
 Q system management command line tool
 
 # Installation
-You will need to install python3 first.
-And then 
-    # pip3 install -r requirements.txt
+You will need to install python3 first, qsmcli has
+    # pip3 install qsmcli
+
+# running qsmcli
+python3 -m qsmcli
 
 ## supported shell mode and command
 

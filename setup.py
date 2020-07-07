@@ -1,12 +1,16 @@
+import os,sys
 import setuptools
 
 with open("README.md", "r") as fh:
     long_description = fh.read()
 
+sys.path.insert(0, (os.path.join(os.path.dirname(__file__),'src')))
+
+import version
 
 setuptools.setup(
     name='qsmcli',  
-    version='0.5',
+    version=version.Version(),
     author="Jiang Junyu",
     author_email="double.chiang@gmail.com",
     description="A ipmitool wrapper to enhance daily operation among servers",

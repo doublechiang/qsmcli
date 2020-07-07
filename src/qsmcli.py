@@ -22,7 +22,8 @@ class Qsmcli():
     """ Command line mode do not preserver any settings, this will cause un-consistence.
     shell mode will try to keep the previous data as much as possible.
     """
-    Cmds = ['me', 'fan', 'service', 'nic', 'cpld', 'mac', 'ipmi', 'install', 'version']
+    Cmds = ['me', 'fan', 'service', 'nic', 'cpld', 'mac', 'ipmi', 'install', 'version', 
+            'host', 'user', 'passw']
 
     def run(self):
         self.process_argument()
