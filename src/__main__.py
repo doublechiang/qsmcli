@@ -1,6 +1,7 @@
-import logging
+import os,sys
 
-from qsmcli import Qsmcli
+import logging
+import qsmcli.qsmcli
 
 logging.basicConfig(level=logging.WARNING)
-Qsmcli().run()
+qsmcli.qsmcli.Qsmcli().run()

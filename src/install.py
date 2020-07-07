@@ -30,8 +30,10 @@ class Install(subcmd.SubCmd):
         """ Create the symbolic name in /usr/local/bin directory
         """
         LOCAL_BIN='/usr/local/bin/'
-        elevate(graphical=False)
+#        elevate(graphical=False)
+        elevate()
         basename = os.path.splitext(os.path.basename(sys.argv[0]))[0]
+        print(basename)
         src = os.path.abspath(sys.argv[0])
         dest = LOCAL_BIN+basename
         if os.path.isfile(dest):

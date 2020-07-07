@@ -22,13 +22,14 @@ class SubCmd(ABC):
     def not_supported(self):
         print(self.__doc__)
 
-    def run(self, arg):
+    def run(self, arg, shell):
         """ run this commands, according subs dictionary.
             if the item value is a raw commands, then send out the command
             if the item value is a function, then call this function, it contain dynamic method.
             if the it contain a SubCommand, then it have more depth value.
         """
         logging.info('%s', inspect.currentframe().f_code.co_filename)
+        self.shell=shell
         action = self.getAction(arg)
         if (isinstance(action, IpmiMsg)):
             ipmiexec.IpmiExec().run(action)
@@ -36,6 +37,7 @@ class SubCmd(ABC):
             action(arg)
         elif isinstance(action, str):
             print(action)
+
 
     def getAction(self, arg):
         """ return IpmiMsg/Function/SubCommand drived class.

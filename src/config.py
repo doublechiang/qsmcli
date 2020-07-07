@@ -62,6 +62,17 @@ class Config:
         setattr(self.instance, name, value )
         self.instance.save()
 
+    def insert_host(self, host):
+        """ If all the host, users & password is not empty
+            Insert a host or update to the hosts database.
+        """
+        if host['host'] and host['user'] and host['passw']:
+            hosts = Config().hosts
+            cred = {'username': host['user'], 'password': host['passw']}
+            hosts[host['host']] = cred
+            Config().hosts = hosts
+
+
     @classmethod
     def getHistoryFnPath(cls):
         return os.path.dirname(os.path.realpath(sys.argv[0])) + '/' + Config.HISTORYFN
