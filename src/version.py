@@ -9,7 +9,7 @@ class Version(subcmd.SubCmd):
     Show version and credit information.
     Bug repoort and Suggestion please visit https://github.com/doublechiang/qsmcli
     """
-    VERSION='0.5.2'
+    VERSION='0.5.3'
 
     def printVersion(self, arg):
         print(self)
@@ -22,4 +22,4 @@ class Version(subcmd.SubCmd):
 
 
 if __name__ ==  "__main__":
-    pass
+    print(Version())

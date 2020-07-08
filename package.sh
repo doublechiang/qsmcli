@@ -12,4 +12,5 @@ echo "clean dist/* folder"
 rm dist/*
 echo "Generate packaged in dist/ folder...."
 python3 setup.py sdist bdist_wheel
+echo "Uploading to pip repository"
 twine upload dist/*
