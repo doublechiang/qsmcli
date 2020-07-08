@@ -17,14 +17,16 @@ class Mac(subcmd.SubCmd):
     GET_MAC_CMD = [0x30, 0x19]
 
     def mac(self, arg):
-        index = self.__parse_arg(arg)
-        msg = IpmiMsg(self.composeList(Mac.GET_MAC_CMD, index, 0))
-        output = IpmiExec().run(msg).output()
-        outlist = output.split()
-
         try:
+            index = self.__parse_arg(arg)
+            msg = IpmiMsg(self.composeList(Mac.GET_MAC_CMD, index, 0))
+            output = IpmiExec().run(msg).output()
+            outlist = output.split()
+
             if outlist[0] == "05":
                 self.__print_ieee(outlist[2:8])
+        except ValueError:
+            print(self.__doc__)
         except:
             logging.warning("Mac addresss not presented.")
 
@@ -38,7 +40,6 @@ class Mac(subcmd.SubCmd):
             logging.error("arguments out of index")
             raise ValueError
         return int(arg)
-
 
     def __print_ieee(self, arg):
         for token in arg[:-1]:
