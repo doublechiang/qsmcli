@@ -3,14 +3,15 @@ set -e
 ./test.sh
 branch=`git rev-parse --abbrev-ref HEAD`
 if [[ $branch != 'master' ]]; then
-    read -p "git branch is not master, press Y if you really want to continue.." input
-    if [[ $input != 'Y' ]]; then
-        exit 1
-    fi
+    # package must pack from master branch
+    read -p "git branch is not master, aborting..." input
+    exit 1
 fi
+version=`python3 src/version.py`
+git tag $version
 echo "clean dist/* folder"
 rm dist/*
 echo "Generate packaged in dist/ folder...."
 python3 setup.py sdist bdist_wheel
-echo "Uploading to pip repository"
+echo "Uploading to pip repository, providing your username jaingjunyu & password for Pypi"
 twine upload dist/*
