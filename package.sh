@@ -9,6 +9,7 @@ if [[ $branch != 'master' ]]; then
 fi
 version=`python3 src/version.py`
 git tag $version
+git push origin --tags
 echo "clean dist/* folder"
 rm dist/*
 echo "Generate packaged in dist/ folder...."
