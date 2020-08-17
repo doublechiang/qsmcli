@@ -1,3 +1,4 @@
 # Libray required by qsmcli
 elevate
 cmd2
+requests
