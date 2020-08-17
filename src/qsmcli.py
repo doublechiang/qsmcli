@@ -16,6 +16,7 @@ from me import Me
 from config import Config
 from install import Install
 from version import Version
+from fw import Fw
 
 
 class Qsmcli():
@@ -23,7 +24,7 @@ class Qsmcli():
     shell mode will try to keep the previous data as much as possible.
     """
     Cmds = ['me', 'fan', 'service', 'nic', 'cpld', 'mac', 'ipmi', 'install', 'version', 
-            'host', 'user', 'passw']
+            'host', 'user', 'passw', 'fw']
 
     def run(self):
         self.process_argument()
@@ -71,4 +72,5 @@ class Qsmcli():
 if __name__ == "__main__":
 #    logging level [DEBUG|INFO|WARNING]
     logging.basicConfig(level=logging.WARNING)
+#    logging.basicConfig(level=logging.INFO)
     Qsmcli().run()

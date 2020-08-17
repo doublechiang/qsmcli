@@ -16,6 +16,7 @@ from service import Service
 from install import Install
 from version import Version
 from me import Me
+from fw import Fw
 from ipmi import Ipmi
 from host import Host, User, Passw
 from config import Config
