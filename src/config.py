@@ -4,7 +4,7 @@ from __future__ import annotations
 import os, sys
 import json
 import logging
-
+from typing import List
 from abc import ABC, abstractmethod
 
 class Observer(ABC):
