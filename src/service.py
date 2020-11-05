@@ -6,6 +6,7 @@ import subcmd
 import inspect
 from ipmiexec import IpmiExec
 from ipmimsg import IpmiMsg
+from devmgr import DevMgr
 
 class Service(subcmd.SubCmd):
     """
@@ -43,7 +44,14 @@ class Service(subcmd.SubCmd):
         msg = IpmiMsg(getraw)
         response_hex = IpmiExec().run(msg).output().split()
         response = [int(x,16) for x in response_hex]
-        setmsg = IpmiMsg(self.composeList(Service.set_conf, Service.supported_services[target], Service.svcAction[action], response[5:34], [0,0]))
+
+        # Grantley platform, at least S2B, check S2B for further trailing zero.
+        devid = DevMgr().getId()
+        if devid == DevMgr.DEVID_S2B:
+            setmsg = IpmiMsg(self.composeList(Service.set_conf, Service.supported_services[target], Service.svcAction[action], response[5:34], [0,0,0]))
+        else:
+            setmsg = IpmiMsg(self.composeList(Service.set_conf, Service.supported_services[target], Service.svcAction[action], response[5:34], [0,0]))
+
         IpmiExec().run(setmsg)
 
 

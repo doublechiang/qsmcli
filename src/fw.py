@@ -13,14 +13,16 @@ import subcmd
 from ipmimsg import IpmiMsg
 from ipmiexec import IpmiExec
 from config import Config
+from devmgr import DevMgr
 
 
 class Fw(subcmd.SubCmd):
     """ fw commands: Firmware maintence, for BIOS and BMC upgrade through http interface.
+        supported platform: Purley S5B
     fw update [bios|bmc] [image]
     description: upgrade the supplied image file through web interface.
     """
-    type = ["bios", "bmc"]
+    CATEGORY = ["bios", "bmc"]
     BMC_COMPLETED='Completed.'
 
 
@@ -29,11 +31,17 @@ class Fw(subcmd.SubCmd):
         """
         logging.info('%s, arg=%s', inspect.currentframe().f_code.co_filename, arg)
         urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
+        grpid = DevMgr().getGrp()
+        if grpid != 'S5x':
+            logging.error("Update through Web Interface currently only support S5x")
+            return
+
         try:
             currentdir = os.getcwd()
             target, fn = self.__parse_arg(arg)
         except ValueError:
             print(self.__doc__)
+            return
 
         # Get the host and credentials.
         env=Config().current
@@ -190,11 +198,12 @@ class Fw(subcmd.SubCmd):
             raise ValueError
         # support if type is in the list
         target = token[1]
-        if target not in Fw.type:
+        if target not in Fw.CATEGORY:
             raise ValueError
-        # check if filename exist
+        # check if image file exist
         fn = token[2]
         if not os.path.isfile(fn):
+            print("can't find file {}".format(fn))
             raise ValueError
         return (target, fn)
 

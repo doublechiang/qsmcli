@@ -63,6 +63,7 @@ set the configuration data when set it. It do not guarantee that BMC has this fe
 
 ## Test
 To run the unit test command, use 'python3 -m unittest'
+Upload to github will trigger Travis CI run the unittest
 
 ## Distribute the package
 To generate the package, use 'pyinstaller qsmcli.py' to build the package.

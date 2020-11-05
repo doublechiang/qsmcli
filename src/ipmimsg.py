@@ -15,21 +15,26 @@ class IpmiMsg():
         if self.chnl:
             str = str + "-b 0x{channel:x} ".format(channel=self.chnl)
 
-        raw_str = "raw "
-        for raw_byte in self.raw:
-            raw_str += "0x%x " % raw_byte
+        if isinstance(self.params, list):
+            raw_str = "raw "
+            for raw_byte in self.params:
+                raw_str += "0x%x " % raw_byte
+            str = str + raw_str
+            return str
+        else:
+            # else it should be ipmitool string format
+            return self.params
 
-        str = str + raw_str
-        return str
-
-    def __init__(self, raw=[], brdg=None, chnl=None):
-        self.raw = raw
+    def __init__(self, params, brdg=None, chnl=None):
+        if not (isinstance(params, list) or isinstance(params, str)):
+            raise AssertionError
+        self.params = params
         self.brdg = brdg
         self.chnl = chnl
 
 
     def __eq__(self, other):
-        if self.raw == other.raw and self.brdg == other.brdg and self.chnl == other.chnl:
+        if self.params == other.params and self.brdg == other.brdg and self.chnl == other.chnl:
             return True
         return False
 
