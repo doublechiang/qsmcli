@@ -19,9 +19,10 @@ from me import Me
 from fw import Fw
 from ipmi import Ipmi
 from host import Host, User, Passw
-from config import Config
+from config import Config, Observer, Subject
 
-class QsmShell(cmd2.Cmd):
+
+class QsmShell(cmd2.Cmd, Observer):
 
     intro = 'Type help or ? to list the command.\n'
 #    prompt = GlobalVars.host + ":" +  GlobalVars.username + "(" + GlobalVars.password +")>"
@@ -75,14 +76,20 @@ class QsmShell(cmd2.Cmd):
     def __init__(self, **kwarg):
         """ load the shell environment from config
         """
-        self.setPrompt(Config().current)
+
+        # Attach the shell to the config publisher.
+        Config().attach(self)
+        self.__setPrompt(Config().current)
         super().__init__(**kwarg)
 
-    def setPrompt(self, env):
+    def __setPrompt(self, env):
         """
         setup the prompt shell by providing a dict.
         """
         self.prompt = "{}:{}({})>".format(env.get('host'), env.get('user'), env.get('passw'))
+
+    def update(self, subject: Subject) -> None:
+        self.__setPrompt(subject)
 
 
 
