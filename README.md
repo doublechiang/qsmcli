@@ -65,4 +65,4 @@ set the configuration data when set it. It do not guarantee that BMC has this fe
 To run the unit test command, use 'python3 -m unittest'
 
 ## Distribute the package
-To generate the package, use 'pyinstaller qsmcli.py' to build the package.
+To generate the package, use 'package.sh' to build the package.

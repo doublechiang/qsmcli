@@ -65,6 +65,7 @@ class Qsmcli():
                 pass
         else:
             shell = QsmShell(persistent_history_file= Config.getHistoryFnPath())
+            
             shell.regCmds(Qsmcli.Cmds)
             shell.cmdloop()
 

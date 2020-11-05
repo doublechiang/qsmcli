@@ -41,7 +41,6 @@ class Host(subcmd.SubCmd):
                         current['passw'] = arg.split()[2]
                     Config().insert_host(current)
                 Config().current = current
-                self.shell.setPrompt(current)
         except ValueError:
             print(self.__doc__)
 
@@ -65,7 +64,6 @@ class User(subcmd.SubCmd):
                 current['user'] = user
                 Config().current = current
                 Config().insert_host(current)
-                self.shell.setPrompt(current)
         except ValueError:
             print(self.__doc__)
 
@@ -88,7 +86,6 @@ class Passw(subcmd.SubCmd):
                 current['passw'] = passw
                 Config().current = current
                 Config().insert_host(current)
-                self.shell.setPrompt(current)
         except ValueError:
             print(self.__doc__)
 
