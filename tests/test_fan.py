@@ -6,8 +6,10 @@ class FanTest(unittest.TestCase):
     def testParams(self):
         """ test these parameters should return the required ipmimsg
         """
-        msg= Fan().getAction("auto")
-        self.assertTrue(msg == IpmiMsg(Fan.AUTO_CMD))
+        pass
+        # Fan auto no longer return IpmiMsg object, it will depend model to perform action.
+        # msg= Fan().getAction("auto")
+        # self.assertTrue(msg == IpmiMsg(Fan.AUTO_CMD))
 
         # wrong parameter should return the document object.
     def testWrongParams(self):

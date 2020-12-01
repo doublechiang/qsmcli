@@ -50,9 +50,11 @@ class Fan(subcmd.SubCmd):
     def auto(self, arg):
         devid = DevMgr().getId()
         if devid == DevMgr.DEVID_S2B or devid == DevMgr.DEVID_S2S:
-            IpmiExec().run(IpmiMsg(Fan.S2B_AUTO_CMD))
+            msg = IpmiMsg(Fan.S2B_AUTO_CMD)
         else:
+            msg = IpmiMsg(Fan.AUTO_CMD)
             IpmiExec().run(IpmiMsg(Fan.AUTO_CMD))
+        IpmiExec().run(msg)
 
     def __parse_arg(self, arg):
         token=arg.split()
