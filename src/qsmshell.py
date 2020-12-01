@@ -9,9 +9,6 @@ import inspect
 # local modules
 import subcmd
 from subcmdfactory import SubCmdFactory
-from version import Version
-from interface import Interface
-from ipmi import Ipmi
 from config import Config, Observer, Subject
 
 
@@ -55,7 +52,8 @@ class QsmShell(cmd2.Cmd, Observer):
         assign = "QsmShell.do_{0} = do_{0}".format(cmd)
         exec(funcdef)
         exec(assign)
-        funcdef = "def help_{}(self): print({}.__doc__)".format(cmd, cmd.capitalize())
+        funcdef = """def help_{}(self):
+            print(SubCmdFactory().Factory('{}').__doc__)""".format(cmd, cmd)
         assign = "QsmShell.help_{0} = help_{0}".format(cmd)
         exec(funcdef)
         exec(assign)
