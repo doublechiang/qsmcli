@@ -7,25 +7,18 @@ import logging
 import inspect
 
 # local modules
-from interface import Interface
-from nic import Nic
-from mac import Mac
-from cpld import Cpld
-from fan import Fan
-from service import Service
-from install import Install
+import subcmd
+from subcmdfactory import SubCmdFactory
 from version import Version
-from me import Me
-from fw import Fw
+from interface import Interface
 from ipmi import Ipmi
-from host import Host, User, Passw
 from config import Config, Observer, Subject
+
 
 
 class QsmShell(cmd2.Cmd, Observer):
 
     intro = 'Type help or ? to list the command.\n'
-#    prompt = GlobalVars.host + ":" +  GlobalVars.username + "(" + GlobalVars.password +")>"
 
     def emptyline(self):
         """ Disable the last command when hitting enter """
@@ -58,7 +51,7 @@ class QsmShell(cmd2.Cmd, Observer):
             complete_xxx 
         """
         funcdef = """def do_{}(self, arg):
-                {}().run(arg, self)""".format(cmd, cmd.capitalize())
+                SubCmdFactory().Factory('{}').run(arg, self)""".format(cmd, cmd)
         assign = "QsmShell.do_{0} = do_{0}".format(cmd)
         exec(funcdef)
         exec(assign)
