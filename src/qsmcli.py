@@ -5,26 +5,19 @@ import subprocess
 import argparse
 import logging
 
+
+
 # local modules
+from subcmdfactory import SubCmdFactory
 from qsmshell import QsmShell
-from mac import Mac
-from cpld import Cpld
-from nic import Nic
-from fan import Fan
-from service import Service
-from me import Me
-from config import Config
-from install import Install
 from version import Version
-from fw import Fw
+from config import Config
 
 
 class Qsmcli():
     """ Command line mode do not preserver any settings, this will cause un-consistence.
     shell mode will try to keep the previous data as much as possible.
     """
-    Cmds = ['me', 'fan', 'service', 'nic', 'cpld', 'mac', 'ipmi', 'install', 'version', 
-            'host', 'user', 'passw', 'fw']
 
     def run(self):
         self.process_argument()
@@ -66,7 +59,7 @@ class Qsmcli():
         else:
             shell = QsmShell(persistent_history_file= Config.getHistoryFnPath())
             
-            shell.regCmds(Qsmcli.Cmds)
+            shell.regCmds(SubCmdFactory.getCmds())
             shell.cmdloop()
 
 
@@ -74,4 +67,5 @@ if __name__ == "__main__":
 #    logging level [DEBUG|INFO|WARNING]
     logging.basicConfig(level=logging.WARNING)
 #    logging.basicConfig(level=logging.INFO)
+    # print(globals()['Fw']())
     Qsmcli().run()

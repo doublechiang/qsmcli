@@ -83,6 +83,5 @@ class SubCmd(ABC):
         # default value for interface.
         self.supported_cmds = []
         self.subs = {}
-    
 
 
