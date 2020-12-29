@@ -24,8 +24,7 @@ class Fw(subcmd.SubCmd):
     """
     CATEGORY = ["bios", "bmc"]
     BMC_COMPLETED='Completed.'
-
-
+    
     def update(self, arg):
         """ Update commands.
         """
@@ -51,7 +50,6 @@ class Fw(subcmd.SubCmd):
             self.__update_bios(env)
         elif target == 'bmc':
             self.__update_bmc(env)
-
 
     def __get_cookie_csrf(self, env):
         url = 'https://' + env.get('host') + '/api/session'
@@ -208,9 +206,5 @@ class Fw(subcmd.SubCmd):
         return (target, fn)
 
 
-    def __init__(self, arg=None):
-
-        self.subs = {
-            "update" : self.update,
-        }
-        self.supported_cmds = self._buildSupportCmds(self.subs)
+    def __init__(self):
+        self.subs = { 'update': self.update }

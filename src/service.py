@@ -64,4 +64,3 @@ class Service(subcmd.SubCmd):
             "ssh": self.subService,
             "solssh": self.subService
         }
-        self.supported_cmds = self._buildSupportCmds(self.subs)

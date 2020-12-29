@@ -22,7 +22,7 @@ class FanTest(unittest.TestCase):
     def testSupported(self):
         """ Me class should return a listed of supported commands.
         """
-        support = Fan().supported_cmds
+        support = Fan().getSupportCmds()
         self.assertIn('duty', support)
         self.assertIn('auto', support)
 

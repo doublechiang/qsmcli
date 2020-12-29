@@ -53,7 +53,6 @@ class Fan(subcmd.SubCmd):
             msg = IpmiMsg(Fan.S2B_AUTO_CMD)
         else:
             msg = IpmiMsg(Fan.AUTO_CMD)
-            IpmiExec().run(IpmiMsg(Fan.AUTO_CMD))
         IpmiExec().run(msg)
 
     def __parse_arg(self, arg):
@@ -69,11 +68,8 @@ class Fan(subcmd.SubCmd):
             raise ValueError
         return (val1, val2)
 
-
-    def __init__(self, arg=None):
-
+    def __init__(self):
         self.subs = {
             "duty" : self.duty,
             "auto" : self.auto
         }
-        self.supported_cmds = self._buildSupportCmds(self.subs)

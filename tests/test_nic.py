@@ -26,7 +26,7 @@ class MeTest(unittest.TestCase):
     def testSupported(self):
         """ Me class should return a listed of supported commands.
         """
-        support = Nic().supported_cmds
+        support = Nic().getSupportCmds()
         self.assertIn("dedicate", support)
         self.assertIn("lom-share", support)
         self.assertIn("mezz-share0", support)

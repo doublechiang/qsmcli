@@ -25,5 +25,4 @@ class Me(subcmd.SubCmd):
             'dimm' : IpmiMsg([0x4, 0x2d, 0xc0], brdg=0x2c, chnl=6),
             'io': IpmiMsg( [0x4, 0x2d, 0xbf], brdg=0x2c, chnl=6)
             }
-        self.supported_cmds = self._buildSupportCmds(self.subs)
 

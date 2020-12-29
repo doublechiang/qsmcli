@@ -10,7 +10,7 @@ from ipmimsg import IpmiMsg
 class Nic(subcmd.SubCmd):
     """
     get, set the BMC dedicate/share NIC
-    nic [get|dedicate|lom-share|mezz-share0|mizz-share1]
+    nic [show|dedicate|lom-share|mezz-share0|mizz-share1]
 
     Return: <complete code> <LAN Card Type>
     For LAN Card Type,
@@ -23,8 +23,9 @@ class Nic(subcmd.SubCmd):
     bmc_nic_get = [0xc, 2, 1, 0xff, 0, 0]
     DECODE_ERROR = "Cant' decode output result"
 
-    def getNicMode(self):
-        msg = IpmiMsg(self.composeList(Nic.bmc_nic_get))
+
+    def getNicMode(self, args):
+        msg = IpmiMsg(cls.composeList(Nic.bmc_nic_get))
         outlist = IpmiExec().run(msg).output().split()
         if outlist[0] == '11':
             # bit [0:3] for NIC mode. 0 dedicated, 1, share- 2,3 share OCP mezzanine slot 
@@ -37,14 +38,12 @@ class Nic(subcmd.SubCmd):
             print(mode.get(outlist[1], Nic.DECODE_ERROR))
         else:
             print(Nic.DECODE_ERROR)
- 
-    def __init__(self, arg=None):
+
+    def __init__(self):
         self.subs = {
-            "get": self.getNicMode(),
+            "show": self.getNicMode,
             "dedicate": IpmiMsg(self.composeList(Nic.bmc_nic_set, 0)),
             "lom-share": IpmiMsg(self.composeList(Nic.bmc_nic_set, 1)),
             "mezz-share0": IpmiMsg(self.composeList(Nic.bmc_nic_set, 2)),
             "mezz-share1": IpmiMsg(self.composeList(Nic.bmc_nic_set, 3))
         }
-        self.supported_cmds=  self._buildSupportCmds(self.subs)
-

@@ -47,7 +47,7 @@ class Mac(subcmd.SubCmd):
                 print(':', end='')
         print(arg[-1])
 
-
-    def __init__(self, arg=None):
-        # No more sub commands, so return the function directly
+    def __init__(sefl):
         self.subs = self.mac
+
+

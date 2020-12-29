@@ -48,7 +48,7 @@ class QsmShell(cmd2.Cmd, Observer):
             complete_xxx 
         """
         funcdef = """def do_{}(self, arg):
-                SubCmdFactory().Factory('{}').run(arg, self)""".format(cmd, cmd)
+                SubCmdFactory().Factory('{}').run(arg)""".format(cmd, cmd)
         assign = "QsmShell.do_{0} = do_{0}".format(cmd)
         exec(funcdef)
         exec(assign)
@@ -58,7 +58,8 @@ class QsmShell(cmd2.Cmd, Observer):
         exec(funcdef)
         exec(assign)
         funcdef = """def complete_{}(self, text, line, begidx, endidx):
-                        return [ i for i in {}().supported_cmds if i.startswith(text)]
+                        subcls = SubCmdFactory().Factory('{}')
+                        return [ i for i in subcls.getSupportCmds() if i.startswith(text)]
                         """.format(cmd, cmd.capitalize())
         assign = "QsmShell.complete_{0} = complete_{0}".format(cmd)
         exec(funcdef)

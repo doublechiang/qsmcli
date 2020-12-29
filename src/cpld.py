@@ -14,12 +14,10 @@ class Cpld(subcmd.SubCmd):
     id: Get CPLD idcode
     """
 
-    def __init__(self, arg=None):
-        self.subs = { 
+    def __init__(self):
+        self.subs = {
             'fw' : IpmiMsg( [0x30, 0x17, 3]),
             'cksum' : IpmiMsg([0x30, 0x17, 1]),
             'id' : IpmiMsg([0x30, 0x17, 2])
-            }
-        self.supported_cmds = self._buildSupportCmds(self.subs)
-
+        }
 

@@ -26,7 +26,7 @@ class MeTest(unittest.TestCase):
     def testSupported(self):
         """ Me class should return a listed of supported commands.
         """
-        support = Me().supported_cmds
+        support = Me().getSupportCmds()
         self.assertIn('version', support)
         self.assertIn('dimm', support)
         self.assertIn('cpu', support)
