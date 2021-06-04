@@ -50,7 +50,11 @@ class Service(subcmd.SubCmd):
         if devid == DevMgr.DEVID_S2B:
             setmsg = IpmiMsg(self.composeList(Service.set_conf, Service.supported_services[target], Service.svcAction[action], response[5:34], [0,0,0]))
         else:
-            setmsg = IpmiMsg(self.composeList(Service.set_conf, Service.supported_services[target], Service.svcAction[action], response[5:34], [0,0]))
+            # For puley, enable/disable ssh require set maximum allowed session to 0xff
+            max_session = 0
+            if target == "ssh":
+                max_session = 0xff
+            setmsg = IpmiMsg(self.composeList(Service.set_conf, Service.supported_services[target], Service.svcAction[action], response[5:34], [max_session,0]))
 
         IpmiExec().run(setmsg)
 
