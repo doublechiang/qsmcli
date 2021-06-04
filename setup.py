@@ -10,7 +10,7 @@ import version
 
 setuptools.setup(
     name='qsmcli',  
-    version=version.Version(),
+    version=str(version.Version()),
     author="Jiang Junyu",
     author_email="double.chiang@gmail.com",
     description="A ipmitool wrapper to enhance daily operation among servers",
@@ -28,7 +28,7 @@ setuptools.setup(
         "Operating System :: OS Independent",
     ],
     keywords='ipmitool qsm',
-    install_requires=['elevate', 'cmd2'],
+    install_requires=['elevate', 'cmd2']
  )
 
 

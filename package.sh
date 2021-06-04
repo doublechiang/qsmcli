@@ -11,7 +11,7 @@ version=`python3 src/version.py`
 git tag $version
 git push origin --tags
 echo "clean dist/* folder"
-rm dist/*
+rm -f dist/*
 echo "Generate packaged in dist/ folder...."
 python3 setup.py sdist bdist_wheel
 echo "Uploading to pip repository, providing your username jaingjunyu & password for Pypi"
